@@ -19,8 +19,19 @@ namespace UserService.Entities
         [MaxLength(500)]
         public string Description { get; set; }
 
+        private ApplicationRole() : base()
+        {
+            Description = "no description";
+        }
+
         public ApplicationRole(string description, string roleName) : base(roleName)
         {
+            Description = description;
+        }
+
+        public ApplicationRole(Guid id, string description, string roleName) : base(roleName)
+        {
+            base.Id = id;
             Description = description;
         }
     }

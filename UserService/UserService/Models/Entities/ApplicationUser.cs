@@ -14,7 +14,7 @@ namespace UserService.Entities
 
     {
         /// <summary>
-        /// Indicator whether the user account is disabled
+        /// Indicator whether the user account is active or disabled
         /// </summary>
         [Required]
         public bool AccountIsActive { get; set; } = true;

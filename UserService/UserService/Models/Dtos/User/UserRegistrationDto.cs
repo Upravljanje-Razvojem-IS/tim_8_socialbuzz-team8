@@ -9,7 +9,7 @@ namespace UserService.Dtos
     /// DTO for creating a basic user account
     /// used mostly for creating admin users
     /// </summary>
-    public class UserCreateDto
+    public class UserRegistrationDto
     { 
         /// <summary>
         /// Username of the user's account
