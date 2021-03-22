@@ -9,7 +9,7 @@ namespace UserService.Dtos
     /// DTO for creating a basic user account
     /// used mostly for creating admin users
     /// </summary>
-    public class UserRegistrationDto
+    public class RegistrationDto
     { 
         /// <summary>
         /// Username of the user's account
@@ -22,10 +22,15 @@ namespace UserService.Dtos
         public string Password { get; set; }
 
         /// <summary>
+        /// User's phone number (later to be used for 2FA)
+        /// </summary>
+        public string PhoneNumber { get; set; }
+
+        /// <summary>
         /// User's role in the system 
         /// used for authorization
         /// </summary>
-        public string Role { get; set; }
+        public string? Role { get; set; }
 
         /// <summary>
         /// User's email
@@ -36,7 +41,7 @@ namespace UserService.Dtos
         /// Type of user's account 
         /// (personal | corporation | admin)
         /// </summary>
-        public string UserType { get; set; }
+        public string AccountType { get; set; }
 
      
     }

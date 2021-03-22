@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserService.Models;
 
 namespace UserService.Entities
 {
@@ -27,7 +28,7 @@ namespace UserService.Entities
 
             #region User Ids
             Guid _adminUserId = Guid.Parse("b3851f6d-8984-43b2-aecd-02b125687204");
-            Guid _personalUseId = Guid.Parse("b3851f6d-8984-43b2-aecd-02b115687204");
+            Guid _personalUserId = Guid.Parse("b3851f6d-8984-43b2-aecd-02b115687204");
             Guid _corporateUserId = Guid.Parse("b3851f6d-8984-43b2-aecd-02b125687004");
             #endregion
 
@@ -38,41 +39,16 @@ namespace UserService.Entities
 
             #region Seed data
             builder.Entity<ApplicationUser>().HasData(
-                new ApplicationUser
-                {
-                    Id = _personalUseId,
-                    UserName = "fefolino",
-                    Email = "fefa@gmail.com",
-                    PhoneNumber = "+38105050505",
-                    AccountIsActive = true,
-                    PasswordHash = "l4g506m3",
-                    TwoFactorEnabled = true
-                },
-                new ApplicationUser
-                {
-                    Id = _adminUserId,
-                    UserName = "admin",
-                    Email = "admin@gmail.com",
-                    PhoneNumber = "+38105056665",
-                    AccountIsActive = true,
-                    PasswordHash = "x3x8tte0",
-                    TwoFactorEnabled = true
-                },
-                new ApplicationUser
-                {
-                    Id = _corporateUserId,
-                    UserName = "Dexico",
-                    Email = "dexico@gmail.com",
-                    PhoneNumber = "+01205050505",
-                    AccountIsActive = true,
-                    PasswordHash = "l4dxvuqru0y12euh",
-                    TwoFactorEnabled = true
-                }
+                new ApplicationUser (_personalUserId, "fefolino", "fefa@gmail.com", "+38105050505", UserAccountTypesExtensions.Personal),
+                
+                new ApplicationUser (_adminUserId, "admin", "admin@gmail.com", "+38105056665", UserAccountTypesExtensions.Admin ),
+                
+                new ApplicationUser (_corporateUserId, "Dexico", "dexico@gmail.com", "+01205050505", UserAccountTypesExtensions.Corporate)
          );
 
             builder.Entity<ApplicationRole>().HasData(
                 new ApplicationRole(_adminRole, "Admin", "Role that enables root level privileges"),
-                new ApplicationRole(_regularUserRole, "Regular User", "Role that enables root level privileges")
+                new ApplicationRole(_regularUserRole, "Regular User", "Role that basic level privileges")
          );
         }
     }

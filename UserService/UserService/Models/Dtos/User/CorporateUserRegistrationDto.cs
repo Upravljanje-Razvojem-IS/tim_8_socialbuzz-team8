@@ -52,5 +52,6 @@ namespace UserService.Dtos
         /// Date on which the corporation was established
         /// </summary>
         public DateTime DateOfEstablisment { get; set; }
+
     }
 }
