@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using UserService.Data;
 using UserService.Entities;
 
 namespace UserService
@@ -43,12 +44,13 @@ namespace UserService
             services.Configure<IdentityOptions>(options =>
             {
                 options.User.RequireUniqueEmail = true;
+                //default 5 attempts before lockout
             });
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -72,6 +74,8 @@ namespace UserService
             {
                 endpoints.MapControllers();
             });
+
+            MyIdentityDataInitializer.SeedUsersAndRoles(userManager, roleManager);
         }
     }
 }

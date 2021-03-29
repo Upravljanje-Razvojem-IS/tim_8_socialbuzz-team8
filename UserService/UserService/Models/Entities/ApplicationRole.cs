@@ -31,7 +31,7 @@ namespace UserService.Entities
 
         public ApplicationRole(Guid id, string description, string roleName) : base(roleName)
         {
-            base.Id = id;
+            Id = id;
             Description = description;
         }
     }

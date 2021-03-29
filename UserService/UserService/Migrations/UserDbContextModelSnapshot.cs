@@ -151,22 +151,6 @@ namespace UserService.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("067ea5db-9991-4ba3-80d1-821cc217fe3c"),
-                            ConcurrencyStamp = "15fb1f10-fdd1-4c88-9584-2db8948b838c",
-                            Description = "Admin",
-                            Name = "Role that enables root level privileges"
-                        },
-                        new
-                        {
-                            Id = new Guid("8157308d-de73-435a-bda3-a91ad6d23c84"),
-                            ConcurrencyStamp = "d37cf980-4d19-4fd3-834b-a120201d716b",
-                            Description = "Regular User",
-                            Name = "Role that basic level privileges"
-                        });
                 });
 
             modelBuilder.Entity("UserService.Entities.ApplicationUser", b =>
@@ -240,53 +224,6 @@ namespace UserService.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("b3851f6d-8984-43b2-aecd-02b115687204"),
-                            AccessFailedCount = 0,
-                            AccountIsActive = true,
-                            ConcurrencyStamp = "a3f9a406-c93f-4ae2-9f73-b1f980b66d33",
-                            Email = "fefa@gmail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumber = "+38105050505",
-                            PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false,
-                            UserAccountType = "Personal",
-                            UserName = "fefolino"
-                        },
-                        new
-                        {
-                            Id = new Guid("b3851f6d-8984-43b2-aecd-02b125687204"),
-                            AccessFailedCount = 0,
-                            AccountIsActive = true,
-                            ConcurrencyStamp = "6032d364-0020-4e9e-8955-c1bb307f9b50",
-                            Email = "admin@gmail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumber = "+38105056665",
-                            PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false,
-                            UserAccountType = "Admin",
-                            UserName = "admin"
-                        },
-                        new
-                        {
-                            Id = new Guid("b3851f6d-8984-43b2-aecd-02b125687004"),
-                            AccessFailedCount = 0,
-                            AccountIsActive = true,
-                            ConcurrencyStamp = "33f9cc6d-8303-4d39-910b-bd5c05689451",
-                            Email = "dexico@gmail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumber = "+01205050505",
-                            PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false,
-                            UserAccountType = "Corporate",
-                            UserName = "Dexico"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

@@ -31,7 +31,7 @@ namespace UserService.Entities
                 return _userAccountType;
             }
 
-            private set
+            set
             {
                 if (value != UserAccountTypesExtensions.Personal && value != UserAccountTypesExtensions.Corporate && value != UserAccountTypesExtensions.Admin) // Check for the valid age
                 {
@@ -52,19 +52,18 @@ namespace UserService.Entities
 
         public ApplicationUser (string userName, string email, string phoneNumber, string userAccountType) : base(userName)
         {
-            this.UserName = userName;
-            this.Email = email;
-            this.PhoneNumber = phoneNumber;
-            this.UserAccountType = userAccountType;
+            UserName = userName;
+            Email = email;
+            PhoneNumber = phoneNumber;
+            UserAccountType = userAccountType;
         }
 
         public ApplicationUser(Guid id, string userName, string email, string phoneNumber, string userAccountType) : base(userName)
         {
-            this.Id = id;
-            this.UserName = userName;
-            this.Email = email;
-            this.PhoneNumber = phoneNumber;
-            this.UserAccountType = userAccountType;
+            Id = id;
+            Email = email;
+            PhoneNumber = phoneNumber;
+            UserAccountType = userAccountType;
         }
         #endregion
 
