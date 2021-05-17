@@ -9,6 +9,8 @@ namespace ProductsAndServices.Context
         {
         }
 
-        public DbSet<ProductService> ProductService { get; set; }
+        public DbSet<ProductService> ProductServices { get; set; }
+        public DbSet<ProductServicePicture> ProductServicePictures { get; set; }
+        public DbSet<ProductServicePrice> ProductServicePrices { get; set; }
     }
 }
