@@ -25,8 +25,6 @@ namespace Gateway
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseOcelot();
-
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
@@ -36,6 +34,8 @@ namespace Gateway
                     await context.Response.WriteAsync("Hello World!");
                 });
             });
+
+            app.UseOcelot();
         }
     }
 }
