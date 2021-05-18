@@ -12,7 +12,9 @@
       "commandName": "IISExpress",
       "launchBrowser": false,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "JWT_ISSUER": "Team8",
+        "JWT_SECRET": "JIae8a978awd83aJ!IUWDHh8wDOo"
       }
     },
     "Gateway": {

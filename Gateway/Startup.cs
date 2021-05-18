@@ -31,9 +31,9 @@ namespace Gateway
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("JIae8a978awd83aJ!IUWDHh8wDOo")),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET"))),
                     ValidateIssuer = true,
-                    ValidIssuer = "Team8",
+                    ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER"),
                     ValidateAudience = false
                 };
                 options.RequireHttpsMetadata = false;
@@ -59,7 +59,7 @@ namespace Gateway
 
                 endpoints.MapGet("/fakejwt", async context =>
                 {
-                    var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("JIae8a978awd83aJ!IUWDHh8wDOo"));
+                    var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET")));
                     var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
                     var claims = new List<Claim>();
@@ -67,7 +67,7 @@ namespace Gateway
                     claims.Add(new Claim("UserName", context.Request.Query["userName"]));
 
                     var token = new JwtSecurityToken(
-                        "Team8",
+                        Environment.GetEnvironmentVariable("JWT_ISSUER"),
                         null,
                         claims,
                         expires: DateTime.Now.AddMinutes(120),
