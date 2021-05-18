@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductsAndServices.Context;
 
 namespace ProductsAndServices.Migrations
 {
     [DbContext(typeof(ProductsAndServicesContext))]
-    partial class ProductsAndServicesContextModelSnapshot : ModelSnapshot
+    [Migration("20210518030113_AddCreatedByUserIDToProductService")]
+    partial class AddCreatedByUserIDToProductService
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

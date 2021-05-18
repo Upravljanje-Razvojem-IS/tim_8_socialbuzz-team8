@@ -64,8 +64,9 @@ namespace ProductsAndServices.Controllers
 
         [HttpPost]
         [Route("")]
-        public IActionResult Create([FromBody] ProductService productService)
+        public IActionResult Create([FromBody] ProductService productService, [FromHeader] int UserID, [FromHeader] string UserName)
         {
+            productService.CreatedByUserID = UserID;
             _context.ProductServices.Add(productService);
             _context.SaveChanges();
 

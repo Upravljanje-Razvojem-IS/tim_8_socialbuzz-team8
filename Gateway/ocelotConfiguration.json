@@ -10,7 +10,15 @@
         }
       ],
       "UpstreamPathTemplate": "/api/users{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "UserID": "Claims[UserID] > value",
+        "UserName": "Claims[UserName] > value"
+      }
     },
 
     {
@@ -23,7 +31,15 @@
         }
       ],
       "UpstreamPathTemplate": "/api/productsandservices{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "UserID": "Claims[UserID] > value",
+        "UserName": "Claims[UserName] > value"
+      }
     }
   ],
   "GlobalConfiguration": {
