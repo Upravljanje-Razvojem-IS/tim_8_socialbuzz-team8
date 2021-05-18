@@ -8,8 +8,12 @@ namespace ProductsAndServices.Entity
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PictureID { get; set; }
-        [Required]
+        [Required, JsonIgnore]
         public byte[] Picture { get; set; }
+        [Required, MaxLength(100)]
+        public string FileName { get; set; }
+        [Required, MaxLength(100)]
+        public string ContentType { get; set; }
         [Required, JsonIgnore]
         public ProductService ProductService { get; set; }
     }
