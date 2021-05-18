@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProductsAndServices.Context;
 using ProductsAndServices.Entity;
 using ProductsAndServices.Entity.DTO;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -158,48 +160,96 @@ namespace ProductsAndServices.Controllers
             return new JsonResult(deletedProductServicePrice);
         }
 
+        [HttpGet]
+        [Route("{id}/pictures")]
+        public IActionResult GetPicturesForProductServiceById(int id)
+        {
+            var productService = _context.ProductServices.Find(id);
 
+            if (productService == null)
+            {
+                return NotFound();
+            }
+
+            _context.Entry(productService).Collection(ps => ps.Pictures).Load();
+
+            return new JsonResult(productService.Pictures);
+        }
 
         [HttpGet]
-        [Route("new")]
-        public HttpResponseMessage New()
+        [Route("{id}/pictures/{pictureId}")]
+        public IActionResult GetPictureForProductServiceById(int id, int pictureId)
         {
-            var psPrice = new ProductServicePrice();
-            psPrice.Price = 63;
+            var productService = _context.ProductServices.Find(id);
 
-  
+            if (productService == null)
+            {
+                return NotFound();
+            }
 
-            var ps = new ProductService();
-            ps.Title = "naziv";
-            ps.Text = "teklst";
-            ps.PriceAgreement = false;
-            ps.IsPriceChangeable = true;
-            ps.Exchangement = true;
-            ps.ExchangementCondition = "nesto";
+            _context.Entry(productService).Collection(ps => ps.Pictures).Load();
 
-            _context.Add(ps);
+            if (!productService.Pictures.Any(psp => psp.PictureID == pictureId))
+            {
+                return NotFound();
+            }
+
+            var productServicePicture = _context.ProductServicePictures.Find(pictureId);
+
+            return new FileStreamResult(new MemoryStream(productServicePicture.Picture), productServicePicture.ContentType);
+        }
+
+        [HttpPost]
+        [Route("{id}/pictures")]
+        public IActionResult CreatePictureForProductServiceById(int id, [FromForm] IFormFile picture)
+        {
+            var productService = _context.ProductServices.Find(id);
+
+            if (productService == null)
+            {
+                return NotFound();
+            }
+
+            var memoryStream = new MemoryStream();
+            picture.CopyTo(memoryStream);
+
+            var newProductServicePicture = new ProductServicePicture()
+            {
+                Picture = memoryStream.ToArray(),
+                FileName = picture.FileName,
+                ContentType = picture.ContentType,
+                ProductService = productService
+            };
+
+            _context.ProductServicePictures.Add(newProductServicePicture);
             _context.SaveChanges();
 
-            return new HttpResponseMessage();
+            return new JsonResult(newProductServicePicture);
         }
 
-        [HttpGet]
-        [Route("price")]
-        public ProductServicePrice Price()
+        [HttpDelete]
+        [Route("{id}/pictures/{pictureId}")]
+        public IActionResult DeletePictureFromProductServiceById(int id, int pictureId)
         {
-            //var price = _context.ProductServicePrices.Find(1);
-            //return price.ProductService;
-            return _context.ProductServicePrices.Find(1);
-        }
+            var productService = _context.ProductServices.Find(id);
 
-        [HttpGet]
-        [Route("prices")]
-        public Task<List<ProductServicePrice>> Prices()
-        {
-            //var price = _context.ProductServicePrices.Find(1);
-            //return price.ProductService;
-            return _context.ProductServicePrices.Include(p => p.ProductService).ToListAsync();
-        }
+            if (productService == null)
+            {
+                return NotFound();
+            }
 
+            _context.Entry(productService).Collection(ps => ps.Pictures).Load();
+
+            if (!productService.Pictures.Any(psp => psp.PictureID == pictureId))
+            {
+                return NotFound();
+            }
+
+            var deletedProductServicePicture = _context.ProductServicePictures.Find(pictureId);
+            _context.ProductServicePictures.Remove(deletedProductServicePicture);
+            _context.SaveChanges();
+
+            return new JsonResult(deletedProductServicePicture);
+        }
     }
 }
