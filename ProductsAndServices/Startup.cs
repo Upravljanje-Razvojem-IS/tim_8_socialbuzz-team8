@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using ProductsAndServices.Context;
+using ProductsAndServices.Swagger;
 
 namespace ProductsAndServices
 {
@@ -26,6 +27,7 @@ namespace ProductsAndServices
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProductsAndServices", Version = "v1" });
+                c.OperationFilter<SwaggerFileOperationFilter>();
             });
 
             string ConnectionString = this.Configuration.GetConnectionString("ProductsAndServices");
