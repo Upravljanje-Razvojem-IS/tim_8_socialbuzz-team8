@@ -4,11 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using ProductsAndServices.Context;
 using ProductsAndServices.Entity;
 using ProductsAndServices.Entity.DTO;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace ProductsAndServices.Controllers
 {
@@ -26,62 +23,96 @@ namespace ProductsAndServices.Controllers
 
         [HttpGet]
         [Route("")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetAll()
         {
-            return new JsonResult(_context.ProductServices.ToListAsync());
+            return StatusCode(
+                StatusCodes.Status200OK,
+                new JsonResult(_context.ProductServices.Include(ps => ps.Prices).Include(ps => ps.Pictures).ToList())
+            );
         }
 
         [HttpGet]
         [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetById(int id)
         {
             var productService = _context.ProductServices.Find(id);
             
             if (productService == null)
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
-            return new JsonResult(productService);
+            return StatusCode(StatusCodes.Status200OK, new JsonResult(productService));
         }
 
         [HttpDelete]
         [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult DeleteById(int id)
         {
             var deletedProductService = _context.ProductServices.Find(id);
 
             if (deletedProductService == null)
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             _context.ProductServices.Remove(deletedProductService);
-            _context.SaveChanges();
+            var success = _context.SaveChanges();
 
-            return new JsonResult(deletedProductService);
+            if (success < 1)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+
+            return StatusCode(StatusCodes.Status200OK, new JsonResult(deletedProductService));
         }
 
         [HttpPost]
         [Route("")]
-        public IActionResult Create([FromBody] ProductService productService, [FromHeader] int UserID, [FromHeader] string UserName)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Create([FromBody] ProductServiceDTO productService, [FromHeader] int UserID, [FromHeader] string UserName)
         {
-            productService.CreatedByUserID = UserID;
-            _context.ProductServices.Add(productService);
-            _context.SaveChanges();
+            var newProductService = new ProductService()
+            {
+                CreatedByUserID = UserID,
+                Title = productService.Title,
+                Text = productService.Text,
+                PriceAgreement = productService.PriceAgreement,
+                IsPriceChangeable = productService.IsPriceChangeable,
+                Exchangement = productService.Exchangement,
+                ExchangementCondition = productService.ExchangementCondition
+            };
 
-            return new JsonResult(productService);
+            _context.ProductServices.Add(newProductService);
+            var success = _context.SaveChanges();
+
+            if (success < 1)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+
+            return StatusCode(StatusCodes.Status201Created, new JsonResult(newProductService));
         }
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Update(int id, [FromBody] ProductService productService)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Update(int id, [FromBody] ProductServiceDTO productService)
         {
             var currentProductService = _context.ProductServices.Find(id);
 
             if (currentProductService == null)
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             currentProductService.Title = productService.Title;
@@ -92,36 +123,46 @@ namespace ProductsAndServices.Controllers
             currentProductService.ExchangementCondition = productService.ExchangementCondition;
 
             _context.ProductServices.Update(currentProductService);
-            _context.SaveChanges();
+            var success = _context.SaveChanges();
 
-            return new JsonResult(currentProductService);
+            if (success < 1)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+
+            return StatusCode(StatusCodes.Status200OK, new JsonResult(currentProductService));
         }
 
         [HttpGet]
         [Route("{id}/prices")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetPricesForProductServiceById(int id)
         {
             var productService = _context.ProductServices.Find(id);
 
             if (productService == null)
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             _context.Entry(productService).Collection(ps => ps.Prices).Load();
 
-            return new JsonResult(productService.Prices);
+            return StatusCode(StatusCodes.Status200OK, new JsonResult(productService.Prices));
         }
 
         [HttpPost]
         [Route("{id}/prices")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult CreatePriceForProductServiceById(int id, [FromBody] ProductServicePriceDTO productServicePrice)
         {
             var productService = _context.ProductServices.Find(id);
 
             if (productService == null)
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             var newProductServicePrice = new ProductServicePrice()
@@ -131,84 +172,104 @@ namespace ProductsAndServices.Controllers
             };
 
             _context.ProductServicePrices.Add(newProductServicePrice);
-            _context.SaveChanges();
+            var success = _context.SaveChanges();
 
-            return new JsonResult(newProductServicePrice);
+            if (success < 1)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+
+            return StatusCode(StatusCodes.Status200OK, new JsonResult(newProductServicePrice));
         }
 
         [HttpDelete]
         [Route("{id}/prices/{priceId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult DeletePriceFromProductServiceById(int id, int priceId)
         {
             var productService = _context.ProductServices.Find(id);
 
             if (productService == null)
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             _context.Entry(productService).Collection(ps => ps.Prices).Load();
 
             if (!productService.Prices.Any(psp => psp.PriceID == priceId))
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             var deletedProductServicePrice = _context.ProductServicePrices.Find(priceId);
             _context.ProductServicePrices.Remove(deletedProductServicePrice);
-            _context.SaveChanges();
+            var success = _context.SaveChanges();
 
-            return new JsonResult(deletedProductServicePrice);
+            if (success < 1)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+
+            return StatusCode(StatusCodes.Status200OK, new JsonResult(deletedProductServicePrice));
         }
 
         [HttpGet]
         [Route("{id}/pictures")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetPicturesForProductServiceById(int id)
         {
             var productService = _context.ProductServices.Find(id);
 
             if (productService == null)
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             _context.Entry(productService).Collection(ps => ps.Pictures).Load();
 
-            return new JsonResult(productService.Pictures);
+            return StatusCode(StatusCodes.Status200OK, new JsonResult(productService.Pictures));
         }
 
         [HttpGet]
         [Route("{id}/pictures/{pictureId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetPictureForProductServiceById(int id, int pictureId)
         {
             var productService = _context.ProductServices.Find(id);
 
             if (productService == null)
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             _context.Entry(productService).Collection(ps => ps.Pictures).Load();
 
             if (!productService.Pictures.Any(psp => psp.PictureID == pictureId))
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
-            var productServicePicture = _context.ProductServicePictures.Find(pictureId);
+            var productServicePicture = productService.Pictures.Where(psp => psp.PictureID == pictureId).FirstOrDefault();
 
             return new FileStreamResult(new MemoryStream(productServicePicture.Picture), productServicePicture.ContentType);
         }
 
         [HttpPost]
         [Route("{id}/pictures")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult CreatePictureForProductServiceById(int id, [FromForm] IFormFile picture)
         {
             var productService = _context.ProductServices.Find(id);
 
             if (productService == null)
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             var memoryStream = new MemoryStream();
@@ -223,34 +284,47 @@ namespace ProductsAndServices.Controllers
             };
 
             _context.ProductServicePictures.Add(newProductServicePicture);
-            _context.SaveChanges();
+            var success = _context.SaveChanges();
 
-            return new JsonResult(newProductServicePicture);
+            if (success < 1)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+
+            return StatusCode(StatusCodes.Status200OK, new JsonResult(newProductServicePicture));
         }
 
         [HttpDelete]
         [Route("{id}/pictures/{pictureId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult DeletePictureFromProductServiceById(int id, int pictureId)
         {
             var productService = _context.ProductServices.Find(id);
 
             if (productService == null)
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             _context.Entry(productService).Collection(ps => ps.Pictures).Load();
 
             if (!productService.Pictures.Any(psp => psp.PictureID == pictureId))
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
-            var deletedProductServicePicture = _context.ProductServicePictures.Find(pictureId);
+            var deletedProductServicePicture = productService.Pictures.Where(psp => psp.PictureID == pictureId).FirstOrDefault();
             _context.ProductServicePictures.Remove(deletedProductServicePicture);
-            _context.SaveChanges();
+            var success = _context.SaveChanges();
 
-            return new JsonResult(deletedProductServicePicture);
+            if (success < 1)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+
+            return StatusCode(StatusCodes.Status200OK, new JsonResult(deletedProductServicePicture));
         }
     }
 }

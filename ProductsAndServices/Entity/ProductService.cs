@@ -23,9 +23,7 @@ namespace ProductsAndServices.Entity
         public bool Exchangement { get; set; }
         [StringLength(100), MinLength(10)]
         public string ExchangementCondition { get; set; }
-        [JsonIgnore]
         public IList<ProductServicePicture> Pictures { get; set; }
-        [JsonIgnore]
         public IList<ProductServicePrice> Prices { get; set; }
     }
 }
