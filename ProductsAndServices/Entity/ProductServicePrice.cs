@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ProductsAndServices.Entity
 {
@@ -9,7 +10,7 @@ namespace ProductsAndServices.Entity
         public int PriceID { get; set; }
         [Required, Column(TypeName = "decimal(9,2)")]
         public decimal Price { get; set; }
-        [Required]
+        [Required, JsonIgnore]
         public ProductService ProductService { get; set; }
     }
 }

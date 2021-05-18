@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ProductsAndServices.Entity
 {
@@ -9,7 +10,7 @@ namespace ProductsAndServices.Entity
         public int PictureID { get; set; }
         [Required]
         public byte[] Picture { get; set; }
-        [Required]
+        [Required, JsonIgnore]
         public ProductService ProductService { get; set; }
     }
 }
