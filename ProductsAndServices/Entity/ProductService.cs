@@ -9,6 +9,8 @@ namespace ProductsAndServices.Entity
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProductServiceID { get; set; }
+        [Required]
+        public int CreatedByUserID { get; set; }
         [Required, StringLength(50), MinLength(10)]
         public string Title { get; set; }
         [Required, StringLength(1000), MinLength(10)]
