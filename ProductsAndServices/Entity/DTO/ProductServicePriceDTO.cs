@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ProductsAndServices.Entity.DTO
 {
-    public class ProductServicePriceDTO
+    public class ProductServicePriceDto
     {
         public decimal Price { get; set; }
     }

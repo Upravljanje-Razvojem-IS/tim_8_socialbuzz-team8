@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ProductsAndServices.Entity.DTO
 {
-    public class ProductServiceDTO
+    public class ProductServiceDto
     {
         public string Title { get; set; }
         public string Text { get; set; }

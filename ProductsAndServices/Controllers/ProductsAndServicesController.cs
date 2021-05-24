@@ -14,7 +14,7 @@ namespace ProductsAndServices.Controllers
     public class ProductsAndServicesController : ControllerBase
     {
 
-        private ProductsAndServicesContext _context;
+        private readonly ProductsAndServicesContext _context;
 
         public ProductsAndServicesController(ProductsAndServicesContext context)
         {
@@ -77,7 +77,7 @@ namespace ProductsAndServices.Controllers
         [Route("")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Create([FromBody] ProductServiceDTO productService, [FromHeader] int UserID, [FromHeader] string UserName)
+        public IActionResult Create([FromBody] ProductServiceDto productService, [FromHeader] int UserID, [FromHeader] string UserName)
         {
             var newProductService = new ProductService()
             {
@@ -106,7 +106,7 @@ namespace ProductsAndServices.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Update(int id, [FromBody] ProductServiceDTO productService)
+        public IActionResult Update(int id, [FromBody] ProductServiceDto productService)
         {
             var currentProductService = _context.ProductServices.Find(id);
 
@@ -156,7 +156,7 @@ namespace ProductsAndServices.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult CreatePriceForProductServiceById(int id, [FromBody] ProductServicePriceDTO productServicePrice)
+        public IActionResult CreatePriceForProductServiceById(int id, [FromBody] ProductServicePriceDto productServicePrice)
         {
             var productService = _context.ProductServices.Find(id);
 
@@ -248,12 +248,12 @@ namespace ProductsAndServices.Controllers
 
             _context.Entry(productService).Collection(ps => ps.Pictures).Load();
 
-            if (!productService.Pictures.Any(psp => psp.PictureID == pictureId))
+            var productServicePicture = productService.Pictures.FirstOrDefault(psp => psp.PictureID == pictureId);
+
+            if (productServicePicture == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
-
-            var productServicePicture = productService.Pictures.Where(psp => psp.PictureID == pictureId).FirstOrDefault();
 
             return new FileStreamResult(new MemoryStream(productServicePicture.Picture), productServicePicture.ContentType);
         }
@@ -310,12 +310,13 @@ namespace ProductsAndServices.Controllers
 
             _context.Entry(productService).Collection(ps => ps.Pictures).Load();
 
-            if (!productService.Pictures.Any(psp => psp.PictureID == pictureId))
+            var deletedProductServicePicture = productService.Pictures.FirstOrDefault(psp => psp.PictureID == pictureId);
+
+            if (deletedProductServicePicture == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
 
-            var deletedProductServicePicture = productService.Pictures.Where(psp => psp.PictureID == pictureId).FirstOrDefault();
             _context.ProductServicePictures.Remove(deletedProductServicePicture);
             var success = _context.SaveChanges();
 
