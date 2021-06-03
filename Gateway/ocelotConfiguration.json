@@ -17,7 +17,8 @@
       },
       "AddHeadersToRequest": {
         "UserID": "Claims[UserID] > value",
-        "UserName": "Claims[UserName] > value"
+        "UserName": "Claims[UserName] > value",
+        "UserRole": "Claims[UserRole] > value"
       }
     },
 
@@ -38,7 +39,8 @@
       },
       "AddHeadersToRequest": {
         "UserID": "Claims[UserID] > value",
-        "UserName": "Claims[UserName] > value"
+        "UserName": "Claims[UserName] > value",
+        "UserRole": "Claims[UserRole] > value"
       }
     }
   ],

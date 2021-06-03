@@ -65,6 +65,7 @@ namespace Gateway
                     var claims = new List<Claim>();
                     claims.Add(new Claim("UserID", context.Request.Query["userId"]));
                     claims.Add(new Claim("UserName", context.Request.Query["userName"]));
+                    claims.Add(new Claim("UserRole", context.Request.Query["userRole"]));
 
                     var token = new JwtSecurityToken(
                         Environment.GetEnvironmentVariable("JWT_ISSUER"),
