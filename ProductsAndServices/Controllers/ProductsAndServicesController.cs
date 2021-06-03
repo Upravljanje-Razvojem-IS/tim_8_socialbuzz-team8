@@ -10,6 +10,8 @@ using System.Linq;
 namespace ProductsAndServices.Controllers
 {
     [Route("api/[controller]")]
+    [Consumes("application/json")]
+    [Produces("application/json")]
     [ApiController]
     public class ProductsAndServicesController : ControllerBase
     {
@@ -21,6 +23,9 @@ namespace ProductsAndServices.Controllers
             this._context = context;
         }
 
+        /// <summary>
+        /// Returns list of all Products/Services
+        /// </summary>
         [HttpGet]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -32,6 +37,10 @@ namespace ProductsAndServices.Controllers
             );
         }
 
+        /// <summary>
+        /// Returns specific Product/Service by its ID
+        /// </summary>
+        /// <param name="id">ID of wanted Product/Service</param>
         [HttpGet]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -48,18 +57,30 @@ namespace ProductsAndServices.Controllers
             return StatusCode(StatusCodes.Status200OK, new JsonResult(productService));
         }
 
+        /// <summary>
+        /// Deletes specific Product/Service by its ID
+        /// </summary>
+        /// <param name="id">ID of product that will be deleted</param>
+        /// <param name="UserID">ID of user who sent request (automatically pulled from JWT)</param>
+        /// <param name="UserRole">Role of user who sent request (automatically pulled from JWT)</param>
         [HttpDelete]
         [Route("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult DeleteById(int id)
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public IActionResult DeleteById(int id, [FromHeader] int UserID, [FromHeader] string UserRole)
         {
             var deletedProductService = _context.ProductServices.Find(id);
 
             if (deletedProductService == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
+            }
+
+            if (deletedProductService.CreatedByUserID != UserID && UserRole != "Admin")
+            {
+                return StatusCode(StatusCodes.Status403Forbidden);
             }
 
             _context.ProductServices.Remove(deletedProductService);
@@ -70,14 +91,19 @@ namespace ProductsAndServices.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
 
-            return StatusCode(StatusCodes.Status200OK, new JsonResult(deletedProductService));
+            return StatusCode(StatusCodes.Status202Accepted, new JsonResult(deletedProductService));
         }
 
+        /// <summary>
+        /// Creates new Product/Service
+        /// </summary>
+        /// <param name="productService">Product/Service object that will be saved in database</param>
+        /// <param name="UserID">ID of user who sent request (automatically pulled from JWT)</param>
         [HttpPost]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Create([FromBody] ProductServiceDto productService, [FromHeader] int UserID, [FromHeader] string UserName)
+        public IActionResult Create([FromBody] ProductServiceDto productService, [FromHeader] int UserID)
         {
             var newProductService = new ProductService()
             {
@@ -101,18 +127,31 @@ namespace ProductsAndServices.Controllers
             return StatusCode(StatusCodes.Status201Created, new JsonResult(newProductService));
         }
 
+        /// <summary>
+        /// Updates specific Product/Service by its ID
+        /// </summary>
+        /// <param name="id">ID of Product/Service that will be updated</param>
+        /// <param name="productService">Updated Product/Service that will be saved in database</param>
+        /// <param name="UserID">ID of user who sent request (automatically pulled from JWT)</param>
+        /// <param name="UserRole">Role of user who sent request (automatically pulled from JWT)</param>
         [HttpPut]
         [Route("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Update(int id, [FromBody] ProductServiceDto productService)
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public IActionResult Update(int id, [FromBody] ProductServiceDto productService, [FromHeader] int UserID, [FromHeader] string UserRole)
         {
             var currentProductService = _context.ProductServices.Find(id);
 
             if (currentProductService == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
+            }
+
+            if (currentProductService.CreatedByUserID != UserID && UserRole != "Admin")
+            {
+                return StatusCode(StatusCodes.Status403Forbidden);
             }
 
             currentProductService.Title = productService.Title;
@@ -130,11 +169,15 @@ namespace ProductsAndServices.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
 
-            return StatusCode(StatusCodes.Status200OK, new JsonResult(currentProductService));
+            return StatusCode(StatusCodes.Status202Accepted, new JsonResult(currentProductService));
         }
 
+        /// <summary>
+        /// Returns all prices for specific Product/Service by its ID
+        /// </summary>
+        /// <param name="id">ID of Product/Service whose prices will be listed</param>
         [HttpGet]
-        [Route("{id}/prices")]
+        [Route("{id}/Prices")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetPricesForProductServiceById(int id)
@@ -151,18 +194,31 @@ namespace ProductsAndServices.Controllers
             return StatusCode(StatusCodes.Status200OK, new JsonResult(productService.Prices));
         }
 
+        /// <summary>
+        /// Creates new price for Product/Service targeted by its ID
+        /// </summary>
+        /// <param name="id">ID of Product/Service</param>
+        /// <param name="productServicePrice">Price that will be linked to specific Product/Service</param>
+        /// <param name="UserID">ID of user who sent request (automatically pulled from JWT)</param>
+        /// <param name="UserRole">Role of user who sent request (automatically pulled from JWT)</param>
         [HttpPost]
-        [Route("{id}/prices")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route("{id}/Prices")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult CreatePriceForProductServiceById(int id, [FromBody] ProductServicePriceDto productServicePrice)
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public IActionResult CreatePriceForProductServiceById(int id, [FromBody] ProductServicePriceDto productServicePrice, [FromHeader] int UserID, [FromHeader] string UserRole)
         {
             var productService = _context.ProductServices.Find(id);
 
             if (productService == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
+            }
+
+            if (productService.CreatedByUserID != UserID && UserRole != "Admin")
+            {
+                return StatusCode(StatusCodes.Status403Forbidden);
             }
 
             var newProductServicePrice = new ProductServicePrice()
@@ -179,21 +235,35 @@ namespace ProductsAndServices.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
 
-            return StatusCode(StatusCodes.Status200OK, new JsonResult(newProductServicePrice));
+            return StatusCode(StatusCodes.Status201Created, new JsonResult(newProductServicePrice));
         }
 
+
+        /// <summary>
+        /// Deletes specific price from specific Product/Service
+        /// </summary>
+        /// <param name="id">ID of Product/Service</param>
+        /// <param name="priceId">ID of specific price which will be deleted</param>
+        /// <param name="UserID">ID of user who sent request (automatically pulled from JWT)</param>
+        /// <param name="UserRole">Role of user who sent request (automatically pulled from JWT)</param>
         [HttpDelete]
-        [Route("{id}/prices/{priceId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route("{id}/Prices/{priceId}")]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult DeletePriceFromProductServiceById(int id, int priceId)
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public IActionResult DeletePriceFromProductServiceById(int id, int priceId, [FromHeader] int UserID, [FromHeader] string UserRole)
         {
             var productService = _context.ProductServices.Find(id);
 
             if (productService == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
+            }
+
+            if (productService.CreatedByUserID != UserID && UserRole != "Admin")
+            {
+                return StatusCode(StatusCodes.Status403Forbidden);
             }
 
             _context.Entry(productService).Collection(ps => ps.Prices).Load();
@@ -212,11 +282,15 @@ namespace ProductsAndServices.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
 
-            return StatusCode(StatusCodes.Status200OK, new JsonResult(deletedProductServicePrice));
+            return StatusCode(StatusCodes.Status202Accepted, new JsonResult(deletedProductServicePrice));
         }
 
+        /// <summary>
+        /// Returns all pictures of specific Product/Service
+        /// </summary>
+        /// <param name="id">ID of Product/Service</param>
         [HttpGet]
-        [Route("{id}/pictures")]
+        [Route("{id}/Pictures")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetPicturesForProductServiceById(int id)
@@ -233,8 +307,13 @@ namespace ProductsAndServices.Controllers
             return StatusCode(StatusCodes.Status200OK, new JsonResult(productService.Pictures));
         }
 
+        /// <summary>
+        /// Returns specific picture of specific Product/Service
+        /// </summary>
+        /// <param name="id">ID of Product/Service</param>
+        /// <param name="pictureId">ID of specific picture</param>
         [HttpGet]
-        [Route("{id}/pictures/{pictureId}")]
+        [Route("{id}/Pictures/{pictureId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetPictureForProductServiceById(int id, int pictureId)
@@ -258,18 +337,31 @@ namespace ProductsAndServices.Controllers
             return new FileStreamResult(new MemoryStream(productServicePicture.Picture), productServicePicture.ContentType);
         }
 
+        /// <summary>
+        /// Uploads new picture for specific Product/Service
+        /// </summary>
+        /// <param name="id">ID of Product/Service</param>
+        /// <param name="picture">Picture that will be uploaded and linked to Product/Service</param>
+        /// <param name="UserID">ID of user who sent request (automatically pulled from JWT)</param>
+        /// <param name="UserRole">Role of user who sent request (automatically pulled from JWT)</param>
         [HttpPost]
-        [Route("{id}/pictures")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route("{id}/Pictures")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult CreatePictureForProductServiceById(int id, [FromForm] IFormFile picture)
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public IActionResult CreatePictureForProductServiceById(int id, [FromForm] IFormFile picture, [FromHeader] int UserID, [FromHeader] string UserRole)
         {
             var productService = _context.ProductServices.Find(id);
 
             if (productService == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
+            }
+
+            if (productService.CreatedByUserID != UserID && UserRole != "Admin")
+            {
+                return StatusCode(StatusCodes.Status403Forbidden);
             }
 
             var memoryStream = new MemoryStream();
@@ -291,21 +383,34 @@ namespace ProductsAndServices.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
 
-            return StatusCode(StatusCodes.Status200OK, new JsonResult(newProductServicePicture));
+            return StatusCode(StatusCodes.Status201Created, new JsonResult(newProductServicePicture));
         }
 
+        /// <summary>
+        /// Deletes specific picture from specific Product/Service
+        /// </summary>
+        /// <param name="id">ID of Product/Service</param>
+        /// <param name="pictureId">ID of specific picture that will be deleted</param>
+        /// <param name="UserID">ID of user who sent request (automatically pulled from JWT)</param>
+        /// <param name="UserRole">Role of user who sent request (automatically pulled from JWT)</param>
         [HttpDelete]
-        [Route("{id}/pictures/{pictureId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Route("{id}/Pictures/{pictureId}")]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult DeletePictureFromProductServiceById(int id, int pictureId)
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public IActionResult DeletePictureFromProductServiceById(int id, int pictureId, [FromHeader] int UserID, [FromHeader] string UserRole)
         {
             var productService = _context.ProductServices.Find(id);
 
             if (productService == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
+            }
+
+            if (productService.CreatedByUserID != UserID && UserRole != "Admin")
+            {
+                return StatusCode(StatusCodes.Status403Forbidden);
             }
 
             _context.Entry(productService).Collection(ps => ps.Pictures).Load();
@@ -325,7 +430,7 @@ namespace ProductsAndServices.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
 
-            return StatusCode(StatusCodes.Status200OK, new JsonResult(deletedProductServicePicture));
+            return StatusCode(StatusCodes.Status202Accepted, new JsonResult(deletedProductServicePicture));
         }
     }
 }
