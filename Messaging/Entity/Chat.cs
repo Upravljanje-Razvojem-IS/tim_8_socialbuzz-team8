@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Messaging.Entity
@@ -18,12 +19,14 @@ namespace Messaging.Entity
         [Required, MaxLength(100)]
         public string Title { get; set; }
 
-        public int PostId { get; set; }
+        public int? PostId { get; set; }
 
-        public int ProductServiceId { get; set; }
+        public int? ProductServiceId { get; set; }
 
+        [JsonIgnore]
         public IList<ChatUser> ChatUsers { get; set; }
 
+        [JsonIgnore]
         public IList<ChatMessage> ChatMessages { get; set; }
     }
 }
