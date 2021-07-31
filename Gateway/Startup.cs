@@ -57,7 +57,7 @@ namespace Gateway
                     await context.Response.WriteAsync("Hello World!");
                 });
 
-                endpoints.MapGet("/fakejwt", async context =>
+                endpoints.MapGet("/generatejwt", async context =>
                 {
                     var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET")));
                     var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
