@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Messaging.Entity
+namespace Messaging.Entity.DTO
 {
-    public class ChatDTO
+    public class ChatUserDTO
     {
-        public string Title { get; set; }
+        public int UserId { get; set; }
     }
 }

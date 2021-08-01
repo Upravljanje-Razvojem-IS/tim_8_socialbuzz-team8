@@ -19,10 +19,6 @@ namespace Messaging.Entity
         [Required, MaxLength(100)]
         public string Title { get; set; }
 
-        public int? PostId { get; set; }
-
-        public int? ProductServiceId { get; set; }
-
         [JsonIgnore]
         public IList<ChatUser> ChatUsers { get; set; }
 

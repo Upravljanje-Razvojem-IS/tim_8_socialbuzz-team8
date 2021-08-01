@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Messaging.Entity
@@ -15,7 +16,7 @@ namespace Messaging.Entity
         [Required]
         public int Userid { get; set; }
 
-        [Required]
+        [Required, JsonIgnore]
         public Chat Chat { get; set; }
 
         [Required, MinLength(10), MaxLength(1000)]
