@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Messaging.Entity
 {
-    public class ChatDTO
+    public class ChatDto
     {
         public string Title { get; set; }
     }

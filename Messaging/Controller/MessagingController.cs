@@ -116,18 +116,18 @@ namespace Messaging.Controller
         /// <summary>
         /// Creates new Chat
         /// </summary>
-        /// <param name="chatDTO">Chat object that will be saved in database</param>
+        /// <param name="chatDto">Chat object that will be saved in database</param>
         /// <param name="UserID">ID of user who sent request (automatically pulled from JWT)</param>
         [HttpPost]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Create([FromBody] ChatDTO chatDTO, [FromHeader] int UserID)
+        public IActionResult Create([FromBody] ChatDto chatDto, [FromHeader] int UserID)
         {
             var chat = new Chat()
             {
                 CreatedBy = UserID,
-                Title = chatDTO.Title,
+                Title = chatDto.Title,
                 ChatUsers = new List<ChatUser>()
             };
 
@@ -162,7 +162,7 @@ namespace Messaging.Controller
         /// Updates specific Chat its ID
         /// </summary>
         /// <param name="id">ID of Chat that will be updated</param>
-        /// <param name="chatDTO">Updated Chat that will be saved in database</param>
+        /// <param name="chatDto">Updated Chat that will be saved in database</param>
         /// <param name="UserID">ID of user who sent request (automatically pulled from JWT)</param>
         /// <param name="UserRole">Role of user who sent request (automatically pulled from JWT)</param>
         [HttpPut]
@@ -171,7 +171,7 @@ namespace Messaging.Controller
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public IActionResult Update(int id, [FromBody] ChatDTO chatDTO, [FromHeader] int UserID, [FromHeader] string UserRole)
+        public IActionResult Update(int id, [FromBody] ChatDto chatDto, [FromHeader] int UserID, [FromHeader] string UserRole)
         {
             var chat = _context.Chats.Find(id);
 
@@ -185,7 +185,7 @@ namespace Messaging.Controller
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
 
-            chat.Title = chatDTO.Title;
+            chat.Title = chatDto.Title;
 
             _context.Chats.Update(chat);
             
@@ -230,7 +230,7 @@ namespace Messaging.Controller
                 currentUserIsParticipant = false;
             }
 
-            if (currentUserIsParticipant == false && UserRole != "Admin")
+            if (!currentUserIsParticipant  && UserRole != "Admin")
             {
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
@@ -252,7 +252,7 @@ namespace Messaging.Controller
         [Route("{id}/users")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult AddUserToChat(int id, [FromBody] ChatUserDTO chatUserDTO, [FromHeader] int UserID, [FromHeader] string UserRole)
+        public IActionResult AddUserToChat(int id, [FromBody] ChatUserDto chatUserDto, [FromHeader] int UserID, [FromHeader] string UserRole)
         {
             var chat = _context.Chats.Find(id);
 
@@ -271,7 +271,7 @@ namespace Messaging.Controller
             {
                 Chat = chat,
                 RequestPending = true,
-                UserId = chatUserDTO.UserId
+                UserId = chatUserDto.UserId
             };
 
             chat.ChatUsers.Add(newChatUser);
@@ -353,7 +353,7 @@ namespace Messaging.Controller
         [Route("{id}/acceptOrReject")]
         [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult AnswerToChatRequest(int id, [FromBody] TrueFalseDTO answer, [FromHeader] int UserID)
+        public IActionResult AnswerToChatRequest(int id, [FromBody] TrueFalseDto answer, [FromHeader] int UserID)
         {
             var chat = _context.Chats.Find(id);
 
@@ -422,7 +422,7 @@ namespace Messaging.Controller
                 currentUserIsParticipant = false;
             }
 
-            if (currentUserIsParticipant == false && UserRole != "Admin")
+            if (!currentUserIsParticipant  && UserRole != "Admin")
             {
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
@@ -449,7 +449,7 @@ namespace Messaging.Controller
         [Route("{id}/messages")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult CreateNewMessageInChat(int id, [FromBody] ChatMessageDTO messageDTO, [FromHeader] int UserID, [FromHeader] string UserRole)
+        public IActionResult CreateNewMessageInChat(int id, [FromBody] ChatMessageDto messageDto, [FromHeader] int UserID, [FromHeader] string UserRole)
         {
             var chat = _context.Chats.Find(id);
 
@@ -467,7 +467,7 @@ namespace Messaging.Controller
                 currentUserIsParticipant = false;
             }
 
-            if (currentUserIsParticipant == false && UserRole != "Admin")
+            if (!currentUserIsParticipant  && UserRole != "Admin")
             {
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
@@ -482,7 +482,7 @@ namespace Messaging.Controller
             {
                 Chat = chat,
                 Userid = UserID,
-                Message = messageDTO.Message,
+                Message = messageDto.Message,
                 ChatMessageSeens = new List<ChatMessageSeen>()
             };
 
@@ -545,7 +545,7 @@ namespace Messaging.Controller
                 currentUserIsParticipant = false;
             }
 
-            if (currentUserIsParticipant == false && UserRole != "Admin")
+            if (!currentUserIsParticipant  && UserRole != "Admin")
             {
                 return StatusCode(StatusCodes.Status403Forbidden);
             }

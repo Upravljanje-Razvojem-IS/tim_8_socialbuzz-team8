@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Messaging.Entity.DTO
 {
-    public class TrueFalseDTO
+    public class TrueFalseDto
     {
         public bool value { get; set; }
     }
