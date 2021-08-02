@@ -230,7 +230,7 @@ namespace Messaging.Controller
                 currentUserIsParticipant = false;
             }
 
-            if (currentUserIsParticipant == false && UserRole != "Admin")
+            if (!currentUserIsParticipant  && UserRole != "Admin")
             {
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
@@ -422,7 +422,7 @@ namespace Messaging.Controller
                 currentUserIsParticipant = false;
             }
 
-            if (currentUserIsParticipant == false && UserRole != "Admin")
+            if (!currentUserIsParticipant  && UserRole != "Admin")
             {
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
@@ -467,7 +467,7 @@ namespace Messaging.Controller
                 currentUserIsParticipant = false;
             }
 
-            if (currentUserIsParticipant == false && UserRole != "Admin")
+            if (!currentUserIsParticipant  && UserRole != "Admin")
             {
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
@@ -545,7 +545,7 @@ namespace Messaging.Controller
                 currentUserIsParticipant = false;
             }
 
-            if (currentUserIsParticipant == false && UserRole != "Admin")
+            if (!currentUserIsParticipant  && UserRole != "Admin")
             {
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
