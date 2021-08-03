@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Messaging.Mocks;
 
 namespace Messaging
 {
@@ -24,6 +25,8 @@ namespace Messaging
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddScoped<IUserMock, UserMock>();
 
             services.AddSwaggerGen(c =>
             {
