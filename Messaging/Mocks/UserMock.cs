@@ -15,7 +15,7 @@ namespace Messaging.Mocks
             FillData();
         }
 
-        private void FillData()
+        private static void FillData()
         {
             Users.AddRange(new List<UserDto>
             {
