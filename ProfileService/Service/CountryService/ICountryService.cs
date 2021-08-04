@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProfileService.Service
 {
-    interface ICountryService
+    public interface ICountryService
     {
         List<Country> GetCountries();
         Country GetCountryById(Guid id);

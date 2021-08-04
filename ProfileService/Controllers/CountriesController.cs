@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProfileService.Data;
 using ProfileService.Models;
+using ProfileService.Models.Dto;
 using ProfileService.Service;
 
 namespace ProfileService.Controllers
@@ -26,44 +27,50 @@ namespace ProfileService.Controllers
 
         // GET: api/Countries
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Country>>> GetCountry()
+        public async Task<ActionResult<IEnumerable<CountryDto>>> GetCountry()
         {
-            return await _context.Country.ToListAsync();
+            var countries = _countryService.GetCountries();
+            var countryDtos = _mapper.Map<List<CountryDto>>(countries);
+            return countryDtos;
         }
 
         // GET: api/Countries/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Country>> GetCountry(Guid id)
+        public async Task<ActionResult<CountryDto>> GetCountry(Guid id)
         {
-            var country = await _context.Country.FindAsync(id);
+            var country = _countryService.GetCountryById(id);
 
             if (country == null)
             {
                 return NotFound();
             }
 
-            return country;
+            var countryDto = _mapper.Map<CountryDto>(country);
+
+            return countryDto;
         }
 
         // PUT: api/Countries/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCountry(Guid id, Country country)
+        public async Task<IActionResult> PutCountry(Guid id, CountryCreationDto countryDto)
         {
-            if (id != country.CountryId)
-            {
-                return BadRequest();
-            }
+            var country = _countryService.GetCountryById(id);
 
-            _context.Entry(country).State = EntityState.Modified;
+            if (country == null)
+            {
+                return NotFound();
+            }
 
             try
             {
-                await _context.SaveChangesAsync();
+                country.CountryName = countryDto.CountryName;
+                country.Deleted = countryDto.Deleted;
+                _countryService.UpdateCountry(country);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CountryExists(id))
+                if (_countryService.GetCountryById(id) == null)
                 {
                     return NotFound();
                 }
@@ -79,33 +86,26 @@ namespace ProfileService.Controllers
         // POST: api/Countries
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Country>> PostCountry(Country country)
+        public async Task<ActionResult<Country>> PostCountry(CountryCreationDto countryDto)
         {
-            _context.Country.Add(country);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCountry", new { id = country.CountryId }, country);
+            var country = _mapper.Map<Country>(countryDto);
+             _countryService.InsertCountry(country);
+            return Created("!api/Countries", country);
         }
 
         // DELETE: api/Countries/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCountry(Guid id)
         {
-            var country = await _context.Country.FindAsync(id);
+            var country = _countryService.GetCountryById(id);
             if (country == null)
             {
                 return NotFound();
             }
 
-            _context.Country.Remove(country);
-            await _context.SaveChangesAsync();
-
+            _countryService.DeleteCountry(id);
             return NoContent();
         }
 
-        private bool CountryExists(Guid id)
-        {
-            return _context.Country.Any(e => e.CountryId == id);
-        }
     }
 }

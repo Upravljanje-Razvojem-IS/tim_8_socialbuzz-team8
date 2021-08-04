@@ -18,6 +18,7 @@ namespace ProfileService.Profiles
             CreateMap<City, CityDto>();
             CreateMap<CityDto, City>();
             CreateMap<CountryDto, Country>();
+            CreateMap<CountryCreationDto, Country>();
             CreateMap<Country, CountryDto>();
             CreateMap<CityDtoCreation, CityDto>();
             CreateMap<CityDtoCreation, City>();
