@@ -42,6 +42,28 @@
         "UserName": "Claims[UserName] > value",
         "UserRole": "Claims[UserRole] > value"
       }
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/messaging{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44363
+        }
+      ],
+      "UpstreamPathTemplate": "/api/messaging{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "UserID": "Claims[UserID] > value",
+        "UserName": "Claims[UserName] > value",
+        "UserRole": "Claims[UserRole] > value"
+      }
     }
   ],
   "GlobalConfiguration": {
