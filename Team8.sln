@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31229.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gateway", "Gateway\Gateway.csproj", "{80C388E7-BC74-467A-B930-3A36A0183866}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductsAndServices", "ProductsAndServices\ProductsAndServices.csproj", "{3609CC23-8B6D-453B-A20F-F349B85DF78A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductsAndServices", "ProductsAndServices\ProductsAndServices.csproj", "{3609CC23-8B6D-453B-A20F-F349B85DF78A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProfileService", "ProfileService\ProfileService.csproj", "{23F14DBC-AFB2-4076-9A0C-35F9F93024BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{3609CC23-8B6D-453B-A20F-F349B85DF78A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3609CC23-8B6D-453B-A20F-F349B85DF78A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3609CC23-8B6D-453B-A20F-F349B85DF78A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23F14DBC-AFB2-4076-9A0C-35F9F93024BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23F14DBC-AFB2-4076-9A0C-35F9F93024BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23F14DBC-AFB2-4076-9A0C-35F9F93024BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23F14DBC-AFB2-4076-9A0C-35F9F93024BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
