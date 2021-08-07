@@ -11,7 +11,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Comments
@@ -33,6 +35,9 @@ namespace Comments
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Comments", Version = "v1" });
+                var xmlComments = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlCommentsPath = Path.Combine(AppContext.BaseDirectory, xmlComments);
+                c.IncludeXmlComments(xmlCommentsPath);
             });
 
             string ConnectionString = this.Configuration.GetConnectionString("Comments");

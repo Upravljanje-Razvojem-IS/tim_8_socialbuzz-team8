@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Comments</name>
+    </assembly>
+    <members>
+        <member name="M:Comments.Controller.CommentsController.GetAll">
+            <summary>
+            Returns list of all comments
+            </summary>
+        </member>
+        <member name="M:Comments.Controller.CommentsController.GetById(System.Int32)">
+            <summary>
+            Returns specific comment by its ID
+            </summary>
+            <param name="id">ID of comment</param>
+        </member>
+        <member name="M:Comments.Controller.CommentsController.DeleteById(System.Int32,System.Int32,System.String)">
+            <summary>
+            Deletes specific comment by its ID
+            </summary>
+            <param name="id">ID of comment that will be deleted</param>
+            <param name="UserID">ID of user who sent request (automatically pulled from JWT)</param>
+            <param name="UserRole">Role of user who sent request (automatically pulled from JWT)</param>
+        </member>
+        <member name="M:Comments.Controller.CommentsController.Create(Comments.Entities.DTO.CommentDto,System.Int32)">
+            <summary>
+            Creates new comment
+            </summary>
+            <param name="comment">Comment that will be saved in database</param>
+            <param name="UserID">ID of user who sent request (automatically pulled from JWT)</param>
+        </member>
+        <member name="M:Comments.Controller.CommentsController.Update(System.Int32,Comments.Entities.DTO.CommentDto,System.Int32,System.String)">
+            <summary>
+            Updates specific comment by its ID
+            </summary>
+            <param name="id">ID of comment that will be updated</param>
+            <param name="comment">Updated comment that will be saved in database</param>
+            <param name="UserID">ID of user who sent request (automatically pulled from JWT)</param>
+            <param name="UserRole">Role of user who sent request (automatically pulled from JWT)</param>
+        </member>
+        <member name="M:Comments.Controller.CommentsController.GetRepliesForCommentById(System.Int32)">
+            <summary>
+            Returns all replies for specific comment by its ID
+            </summary>
+            <param name="id">ID of comment whose replies will be listed</param>
+        </member>
+        <member name="M:Comments.Controller.CommentsController.CreateReplyForCommentById(System.Int32,Comments.Entities.DTO.CommentReplyDto,System.Int32,System.String)">
+            <summary>
+            Creates new reply for comment by its ID
+            </summary>
+            <param name="id">ID of comment</param>
+            <param name="commentReply">Reply that will be linked to specific comment</param>
+            <param name="UserID">ID of user who sent request (automatically pulled from JWT)</param>
+            <param name="UserRole">Role of user who sent request (automatically pulled from JWT)</param>
+        </member>
+        <member name="M:Comments.Controller.CommentsController.DeleteReplyFromCommentById(System.Int32,System.Int32,System.Int32,System.String)">
+            <summary>
+            Deletes specific comment reply from specific comment
+            </summary>
+            <param name="id">ID of comment</param>
+            <param name="replyId">ID of reply which will be deleted</param>
+            <param name="UserID">ID of user who sent request (automatically pulled from JWT)</param>
+            <param name="UserRole">Role of user who sent request (automatically pulled from JWT)</param>
+        </member>
+        <member name="M:Comments.Controller.CommentsController.UpdateCommentReplyForCommentId(System.Int32,Comments.Entities.DTO.CommentReplyDto,System.Int32,System.String)">
+            <summary>
+            Updates specific comment reply by its ID
+            </summary>
+            <param name="replyId">ID of comment reply that will be updated</param>
+            <param name="comment">Updated comment reply that will be saved in database</param>
+            <param name="UserID">ID of user who sent request (automatically pulled from JWT)</param>
+            <param name="UserRole">Role of user who sent request (automatically pulled from JWT)</param>
+        </member>
+        <member name="P:Comments.Entities.Comment.Id">
+            <summary>
+            Comment ID
+            </summary>
+        </member>
+        <member name="P:Comments.Entities.Comment.CreatedByUserId">
+            <summary>
+            ID of User who created the comment
+            </summary>
+        </member>
+        <member name="P:Comments.Entities.Comment.Text">
+            <summary>
+            Comment text
+            </summary>
+        </member>
+        <member name="P:Comments.Entities.Comment.PostId">
+            <summary>
+            ID of post which comment refers to
+            </summary>
+        </member>
+        <member name="P:Comments.Entities.Comment.Replies">
+            <summary>
+            List of comment replies
+            </summary>
+        </member>
+        <member name="P:Comments.Entities.CommentReply.Id">
+            <summary>
+            ID of comment reply
+            </summary>
+        </member>
+        <member name="P:Comments.Entities.CommentReply.Comment">
+            <summary>
+            Comment to which is replied to
+            </summary>
+        </member>
+        <member name="P:Comments.Entities.CommentReply.UserId">
+            <summary>
+            ID of User who wrote the reply
+            </summary>
+        </member>
+        <member name="P:Comments.Entities.CommentReply.Text">
+            <summary>
+            Comment reply text
+            </summary>
+        </member>
+        <member name="P:Comments.Entities.DTO.CommentDto.Text">
+            <summary>
+            Comment text
+            </summary>
+        </member>
+        <member name="P:Comments.Entities.DTO.CommentDto.PostId">
+            <summary>
+            ID of post which comment refers to
+            </summary>
+        </member>
+        <member name="P:Comments.Entities.DTO.CommentReplyDto.Text">
+            <summary>
+            Comment reply text
+            </summary>
+        </member>
+    </members>
+</doc>

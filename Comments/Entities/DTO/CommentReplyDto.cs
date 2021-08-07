@@ -7,6 +7,9 @@ namespace Comments.Entities.DTO
 {
     public class CommentReplyDto
     {
+        /// <summary>
+        /// Comment reply text
+        /// </summary>
         public string Text { get; set; }
     }
 }
