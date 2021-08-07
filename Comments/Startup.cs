@@ -1,4 +1,5 @@
 using Comments.Context;
+using Comments.Entities.Mocks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +33,7 @@ namespace Comments
         {
 
             services.AddControllers();
+            services.AddScoped<IUserMock, UserMock>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Comments", Version = "v1" });

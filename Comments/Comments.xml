@@ -72,6 +72,11 @@
             <param name="UserID">ID of user who sent request (automatically pulled from JWT)</param>
             <param name="UserRole">Role of user who sent request (automatically pulled from JWT)</param>
         </member>
+        <member name="T:Comments.Entities.Comment">
+            <summary>
+            Comment model
+            </summary>
+        </member>
         <member name="P:Comments.Entities.Comment.Id">
             <summary>
             Comment ID
@@ -97,6 +102,11 @@
             List of comment replies
             </summary>
         </member>
+        <member name="T:Comments.Entities.CommentReply">
+            <summary>
+            Comment reply model
+            </summary>
+        </member>
         <member name="P:Comments.Entities.CommentReply.Id">
             <summary>
             ID of comment reply
@@ -117,6 +127,11 @@
             Comment reply text
             </summary>
         </member>
+        <member name="T:Comments.Entities.DTO.CommentDto">
+            <summary>
+            Comment DTO model
+            </summary>
+        </member>
         <member name="P:Comments.Entities.DTO.CommentDto.Text">
             <summary>
             Comment text
@@ -127,9 +142,45 @@
             ID of post which comment refers to
             </summary>
         </member>
+        <member name="T:Comments.Entities.DTO.CommentReplyDto">
+            <summary>
+            Comment reply DTO model
+            </summary>
+        </member>
         <member name="P:Comments.Entities.DTO.CommentReplyDto.Text">
             <summary>
             Comment reply text
+            </summary>
+        </member>
+        <member name="P:Comments.Entities.DTO.UserDto.UserId">
+            <summary>
+            User ID
+            </summary>
+        </member>
+        <member name="P:Comments.Entities.DTO.UserDto.Name">
+            <summary>
+            User name
+            </summary>
+            
+        </member>
+        <member name="P:Comments.Entities.DTO.UserDto.LastName">
+            <summary>
+            Last name of user
+            </summary>
+        </member>
+        <member name="P:Comments.Entities.DTO.UserDto.Address">
+            <summary>
+            User address
+            </summary>
+        </member>
+        <member name="P:Comments.Entities.DTO.UserDto.Email">
+            <summary>
+            User email
+            </summary>
+        </member>
+        <member name="P:Comments.Entities.DTO.UserDto.Telephone">
+            <summary>
+            User telephone
             </summary>
         </member>
     </members>

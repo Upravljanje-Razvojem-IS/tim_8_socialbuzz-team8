@@ -1,6 +1,7 @@
 ﻿using Comments.Context;
 using Comments.Entities;
 using Comments.Entities.DTO;
+using Comments.Entities.Mocks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,10 +19,12 @@ namespace Comments.Controller
     public class CommentsController: ControllerBase
     {
         private readonly CommentsContext _context;
+        private readonly IUserMock _user;
 
-        public CommentsController(CommentsContext context)
+        public CommentsController(CommentsContext context, IUserMock user)
         {
             this._context = context;
+            this._user = user;
         }
 
         /// <summary>
@@ -80,6 +83,11 @@ namespace Comments.Controller
                 return StatusCode(StatusCodes.Status404NotFound);
             }
 
+            if (_user.GetUserById(UserID) == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+
             if (deletedComment.CreatedByUserId!= UserID && UserRole != "Admin")
             {
                 return StatusCode(StatusCodes.Status403Forbidden);
@@ -107,6 +115,11 @@ namespace Comments.Controller
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Create([FromBody] CommentDto comment, [FromHeader] int UserID)
         {
+            if (_user.GetUserById(UserID) == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+
             var newComment = new Comment()
             {
                 CreatedByUserId = UserID,
@@ -209,9 +222,9 @@ namespace Comments.Controller
                 return StatusCode(StatusCodes.Status404NotFound);
             }
 
-            if (UserID == 0)
+            if (_user.GetUserById(UserID) == null)
             {
-                return StatusCode(StatusCodes.Status403Forbidden);
+                return StatusCode(StatusCodes.Status400BadRequest);
             }
 
             var newCommentReply = new CommentReply()
@@ -253,6 +266,11 @@ namespace Comments.Controller
             if (comment == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
+            }
+
+            if (_user.GetUserById(UserID) == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
             }
 
             if (reply.UserId!= UserID && UserRole != "Admin")
@@ -299,6 +317,11 @@ namespace Comments.Controller
             if (currentReply == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
+            }
+
+            if (_user.GetUserById(UserID) == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
             }
 
             if (currentReply.UserId != UserID && UserRole != "Admin")
