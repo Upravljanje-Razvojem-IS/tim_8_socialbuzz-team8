@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace Comments.Entities.DTO
 {
+    /// <summary>
+    /// Comment DTO model
+    /// </summary>
     public class CommentDto
     {
         /// <summary>

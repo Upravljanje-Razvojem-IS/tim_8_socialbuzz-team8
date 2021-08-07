@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Comments.Entities
 {
+    /// <summary>
+    /// Comment reply model
+    /// </summary>
     public class CommentReply
     {
         /// <summary>

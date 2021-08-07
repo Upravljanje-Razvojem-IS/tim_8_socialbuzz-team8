@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Comments.Entities
 {
+    /// <summary>
+    /// Comment model
+    /// </summary>
     public class Comment
     {
         /// <summary>
