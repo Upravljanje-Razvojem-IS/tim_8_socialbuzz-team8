@@ -39,9 +39,9 @@ namespace ProfileService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CityDto>>> GetCities()
         {
-            var cities = _cityService.GetCities();
             try
             {
+                var cities = _cityService.GetCities();
                 return _mapper.Map<List<CityDto>>(cities);
             }
             catch (Exception)
@@ -63,14 +63,13 @@ namespace ProfileService.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CityDto>> GetCity(Guid id)
         {
-            var city = _cityService.GetCityById(id);
-
-            if (city == null)
-            {
-                return NotFound();
-            }
             try
             {
+                var city = _cityService.GetCityById(id);
+                if (city == null)
+                {
+                    return NotFound();
+                }
                 return _mapper.Map<CityDto>(city);
 
             }
@@ -107,7 +106,7 @@ namespace ProfileService.Controllers
             }
             try
             {
-                _cityService.UpdateCity(cityToUpdate, newCity);
+                _cityService.UpdateCity(cityToUpdate, _mapper.Map<City>(newCity));
                 return NoContent();
             }
             catch (Exception)

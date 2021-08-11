@@ -37,7 +37,7 @@ namespace ProfileService.Service
             _cityRepository.InsertCity(city);
         }
 
-        public void UpdateCity(City city, CityMutationDto newCity)
+        public void UpdateCity(City city, City newCity)
         {
             city.CityName = newCity.CityName;
             city.CountryId = newCity.CountryId;

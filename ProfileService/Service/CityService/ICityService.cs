@@ -12,7 +12,7 @@ namespace ProfileService.Service
         List<City> GetCities();
         City GetCityById(Guid id);
         void InsertCity(City city);
-        void UpdateCity(City city, CityMutationDto newCity);
+        void UpdateCity(City city, City newCity);
         City DeleteCity(Guid id);
     }
 }

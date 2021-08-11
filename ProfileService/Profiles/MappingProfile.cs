@@ -13,7 +13,9 @@ namespace ProfileService.Profiles
         public MappingProfile()
         {
             // Add as many of these lines as you need to map your objects
-            CreateMap<UserDetails, UserDetailsDto>();
+            CreateMap<UserDetails, UserDetailsDto>().ForMember(
+                dest => dest.CityName,
+                opt => opt.MapFrom(src => $"{src.City.CityName}"));
             CreateMap<UserDetailsDto, UserDetails>();
             CreateMap<City, CityDto>().ForMember(
                 dest => dest.Country,
@@ -26,7 +28,7 @@ namespace ProfileService.Profiles
             CreateMap<CityMutationDto, City>();
             CreateMap<CorporateUserDetailsDto, CorporateUserDetails>();
             CreateMap<CorporateUserDetails, CorporateUserDetailsDto>();
-            CreateMap<UserCreationDto, UserDetails>();
+            CreateMap<UserMutationDto, UserDetails>();
 
         }
     }
