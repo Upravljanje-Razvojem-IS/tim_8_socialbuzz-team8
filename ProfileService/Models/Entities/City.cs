@@ -36,6 +36,6 @@ namespace ProfileService.Models
         /// </summary>
         [ForeignKey("CountryId")]
         public Guid CountryId { get; set; }
-        public virtual Country Country { get; set; }
+        public Country Country { get; set; }
     }
 }

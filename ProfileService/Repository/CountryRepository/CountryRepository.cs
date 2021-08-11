@@ -21,7 +21,7 @@ namespace ProfileService.Repository.CountryRepository
 
         public List<Country> GetCountries()
         {
-            return FindAll();
+            return Query.Where<Country>(pred => pred.CountryId != null).ToList();
         }
 
         public Country GetCountryById(Guid id)

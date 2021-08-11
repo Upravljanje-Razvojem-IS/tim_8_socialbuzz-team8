@@ -20,11 +20,18 @@ namespace ProfileService.Data
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("ProfileDb"));
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<City>().Navigation(c => c.Country).AutoInclude();
+            modelBuilder.Entity<UserDetails>().Navigation(ud => ud.City).AutoInclude();
+        }
+
         //public DbSet<AuthInfo> AuthInfo { get; set; }
         public DbSet<UserDetails> UserDetails {get; set;}
         public DbSet<City> City { get; set; }
         public DbSet<Country> Country { get; set; }
         public DbSet<CorporateUserDetails> CorporateUserDetails { get; set; }
+        
     }
 
 }

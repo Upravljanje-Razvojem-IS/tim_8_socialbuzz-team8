@@ -1,4 +1,5 @@
 ﻿using ProfileService.Models;
+using ProfileService.Models.Dto;
 using ProfileService.Repository.CityRepository;
 using System;
 using System.Collections.Generic;
@@ -36,9 +37,13 @@ namespace ProfileService.Service
             _cityRepository.InsertCity(city);
         }
 
-        public void UpdateCity(City city)
+        public void UpdateCity(City city, CityMutationDto newCity)
         {
+            city.CityName = newCity.CityName;
+            city.CountryId = newCity.CountryId;
+            city.Deleted = newCity.Deleted;
             _cityRepository.UpdateCity(city);
         }
     }
 }
+

@@ -18,23 +18,48 @@ namespace ProfileService.Controllers
     public class CitiesController : ControllerBase
     {
         private readonly ICityService _cityService;
+        private readonly ICountryService _countryService;
         private readonly IMapper _mapper;
 
-        public CitiesController(ICityService cityService, IMapper mapper)
+        public CitiesController(ICityService cityService, ICountryService countryService, IMapper mapper)
         {
             _cityService = cityService;
+            _countryService = countryService;
             _mapper = mapper;
         }
 
         // GET: api/Cities
+        /// <summary>
+        /// Returns list of all cities saved in db
+        /// </summary>
+        /// <returns>List of cities</returns>
+        /// <response code="200">Returns the list</response>
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="500">Error on the server</response>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CityDto>>> GetCity()
+        public async Task<ActionResult<IEnumerable<CityDto>>> GetCities()
         {
             var cities = _cityService.GetCities();
-            return _mapper.Map<List<CityDto>>(cities);
+            try
+            {
+                return _mapper.Map<List<CityDto>>(cities);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error on the server");
+            }
         }
 
         // GET: api/Cities/5
+        /// <summary>
+        /// Returns city with a given id
+        /// </summary>
+        /// <param name="id">City Id</param>
+        /// <returns>City with cityId</returns>
+        ///<response code="200">Returns the city</response>
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">City with cityId is not found</response>
+        /// <response code="500">Error on the server</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<CityDto>> GetCity(Guid id)
         {
@@ -44,71 +69,111 @@ namespace ProfileService.Controllers
             {
                 return NotFound();
             }
+            try
+            {
+                return _mapper.Map<CityDto>(city);
 
-            return _mapper.Map<CityDto>(city);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error on the server");
+            }
         }
 
         // PUT: api/Cities/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutCity(Guid id, City city)
-        //{
-        //    if (id != city.CityId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(city).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!CityExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
-        // POST: api/Cities
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<CityDto>> PostCity(CityDtoCreation city)
+        /// <summary>
+        /// Update's the city
+        /// </summary>
+        /// <param name="id">City's Id</param>
+        /// <param2 name="newCity">City info that we want updated</param>
+        /// <returns>Confirmation of update</returns>
+        /// <response code="204">City updated</response>
+        /// <response code="400">City with given id doesnt exist | Country with given id doesn't exist </response>
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="500">Error on the server</response>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCity(Guid id, CityMutationDto newCity)
         {
-            var cityForCreation = _mapper.Map<City>(city);
-            _cityService.InsertCity(cityForCreation);
-            return Ok();
+            var cityToUpdate = _cityService.GetCityById(id);
+
+            if (cityToUpdate == null)
+            {
+                return BadRequest("City with given id doesnt exist");
+            }
+
+            if (_countryService.GetCountryById(newCity.CountryId) == null)
+            {
+                return BadRequest("Country with given id doesn't exist");
+            }
+            try
+            {
+                _cityService.UpdateCity(cityToUpdate, newCity);
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error on the server");
+            }
+
         }
 
-        //// DELETE: api/Cities/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteCity(Guid id)
-        //{
-        //    var city = await _context.City.FindAsync(id);
-        //    if (city == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // POST: api/Cities
+        /// <summary>
+        /// Creates a new city
+        /// </summary>
+        /// <param name="city">Dto model of a city</param>
+        /// <returns>Confirmation of the creation of city</returns>
+        /// <response code="201">City created</response>
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="500">There was an error on the server</response>
+        [HttpPost]
+        public async Task<ActionResult<CityDto>> PostCity(CityMutationDto city)
+        {
+            var cityForCreation = _mapper.Map<City>(city);
+            if (_countryService.GetCountryById(cityForCreation.CountryId) == null)
+            {
+                return BadRequest("Country with given id doesn't exist");
+            }
+            try
+            {
+                _cityService.InsertCity(cityForCreation);
+                return Created("!api/Cities", cityForCreation);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error on the server");
+            }
+        }
 
-        //    _context.City.Remove(city);
-        //    await _context.SaveChangesAsync();
+        // DELETE: api/Cities/5
+        /// <summary>
+        /// Soft delte city with given id
+        /// </summary>
+        /// <param name="id">City Id</param>
+        /// <response code="204">City succesfully deleted</response>
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="400">City with cityId not found</response>
+        /// <response code="500">Error on the server while deleting</response>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCity(Guid id)
+        {
+            var city = _cityService.GetCityById(id);
 
-        //    return NoContent();
-        //}
+            if (city == null)
+            {
+                return BadRequest("City with given id doesnt exist");
+            }
 
-        //private bool CityExists(Guid id)
-        //{
-        //    return _context.City.Any(e => e.CityId == id);
-        //}
+            try
+            {
+            _cityService.DeleteCity(id);
+            return NoContent();
+             }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error on the server");
+            }
+        }
+
     }
 }

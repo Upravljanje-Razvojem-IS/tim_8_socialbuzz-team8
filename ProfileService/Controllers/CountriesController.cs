@@ -27,7 +27,7 @@ namespace ProfileService.Controllers
 
         // GET: api/Countries
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CountryDto>>> GetCountry()
+        public async Task<ActionResult<IEnumerable<CountryDto>>> GetCountries()
         {
             var countries = _countryService.GetCountries();
             var countryDtos = _mapper.Map<List<CountryDto>>(countries);

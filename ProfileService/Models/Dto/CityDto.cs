@@ -10,6 +10,6 @@ namespace ProfileService.Models.Dto
         public Guid CityId { get; set; }
         public string CityName { get; set; }
         public bool Deleted { get; set; }
-        public Guid CountryId { get; set; }
+        public string Country { get; set; }
     }
 }

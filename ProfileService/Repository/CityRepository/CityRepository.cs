@@ -1,4 +1,5 @@
 ﻿using ITSolutionsCompanyV1.Repositories;
+using Microsoft.EntityFrameworkCore;
 using ProfileService.Data;
 using ProfileService.Models;
 using System;

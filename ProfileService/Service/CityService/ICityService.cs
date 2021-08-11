@@ -1,4 +1,5 @@
 ﻿using ProfileService.Models;
+using ProfileService.Models.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace ProfileService.Service
         List<City> GetCities();
         City GetCityById(Guid id);
         void InsertCity(City city);
-        void UpdateCity(City city);
+        void UpdateCity(City city, CityMutationDto newCity);
         City DeleteCity(Guid id);
     }
 }
