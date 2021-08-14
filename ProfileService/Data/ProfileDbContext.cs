@@ -24,6 +24,9 @@ namespace ProfileService.Data
         {
             modelBuilder.Entity<City>().Navigation(c => c.Country).AutoInclude();
             modelBuilder.Entity<UserDetails>().Navigation(ud => ud.City).AutoInclude();
+            modelBuilder.Entity<CorporateUserDetails>()
+                .HasIndex(cu => cu.Pib)
+                .IsUnique();
         }
 
         //public DbSet<AuthInfo> AuthInfo { get; set; }

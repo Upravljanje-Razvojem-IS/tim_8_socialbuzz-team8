@@ -28,6 +28,7 @@ namespace ProfileService.Profiles
             CreateMap<CityMutationDto, City>();
             CreateMap<CorporateUserDetailsDto, CorporateUserDetails>();
             CreateMap<CorporateUserDetails, CorporateUserDetailsDto>();
+            CreateMap<CorporateUserDetailsMutationDto, CorporateUserDetails>();
             CreateMap<UserMutationDto, UserDetails>();
 
         }

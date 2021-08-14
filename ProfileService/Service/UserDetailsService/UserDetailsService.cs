@@ -52,9 +52,19 @@ namespace ProfileService.Service.UserDetailsService
             _userDetailsRepository.InsertUserDetails(userDetails);
         }
 
-        public void UpdateCorporateUserDetails(CorporateUserDetails corporateUserDetails)
+        public void UpdateCorporateUserDetails(CorporateUserDetails oldCorporateUserDetails, CorporateUserDetails newCorporateUserDetails)
         {
-            _userDetailsRepository.UpdateCorporateUserDetails(corporateUserDetails);
+            oldCorporateUserDetails.Deleted = newCorporateUserDetails.Deleted;
+            oldCorporateUserDetails.Description = newCorporateUserDetails.Description;
+            oldCorporateUserDetails.DateOfBirth = newCorporateUserDetails.DateOfBirth;
+            oldCorporateUserDetails.CityId = newCorporateUserDetails.CityId;
+            oldCorporateUserDetails.LastName = newCorporateUserDetails.LastName;
+            oldCorporateUserDetails.Name = newCorporateUserDetails.Name;
+            oldCorporateUserDetails.ProfilePicture = newCorporateUserDetails.ProfilePicture;
+            oldCorporateUserDetails.Adress = newCorporateUserDetails.Adress;
+            oldCorporateUserDetails.CorporationName = newCorporateUserDetails.CorporationName;
+            oldCorporateUserDetails.Pib = newCorporateUserDetails.Pib;
+            _userDetailsRepository.UpdateCorporateUserDetails(oldCorporateUserDetails);
         }
 
         public void UpdateUserDetails(UserDetails oldUserDetails, UserDetails newUserDetails)

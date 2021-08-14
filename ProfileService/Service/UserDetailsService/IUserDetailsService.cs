@@ -15,7 +15,7 @@ namespace ProfileService.Service.UserDetailsService
         void InsertUserDetails(UserDetails userDetails);
         void UpdateUserDetails(UserDetails oldUserDetails, UserDetails newUserDetails);
         void InserCorporatetUserDetails(CorporateUserDetails corporateUserDetails);
-        void UpdateCorporateUserDetails(CorporateUserDetails corporateUserDetails);
+        void UpdateCorporateUserDetails(CorporateUserDetails corporateUserDetails, CorporateUserDetails newCorporateUserDetails);
         UserDetails DeleteUserDetails(Guid id);
 
     }
