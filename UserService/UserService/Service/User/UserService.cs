@@ -11,12 +11,10 @@ namespace UserService.Service.User
     public class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IMapper _mapper;
 
-        public UserService(UserManager<ApplicationUser> userManager, IMapper mapper)
+        public UserService(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
-            _mapper = mapper;
         }
 
         public ApplicationUser CreateCorporateUser(ApplicationUser user)

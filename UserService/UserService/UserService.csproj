@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\tim8-socialbuzzf\tim_8_socialbuzz-team8\ProfileService\ProfileService.csproj" />
+    <ProjectReference Include="..\..\ProfileService\ProfileService.csproj" />
   </ItemGroup>
 
 

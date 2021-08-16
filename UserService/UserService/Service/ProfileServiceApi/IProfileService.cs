@@ -1,4 +1,5 @@
 ﻿using ProfileService.Models;
+using ProfileService.Models.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +9,14 @@ namespace UserService.Service.ProfileServiceApi
 {
     interface IProfileService
     {
-        List<UserDetails> GetUserDetails();
-        List<CorporateUserDetails> GetCorporateUserDetails();
-        UserDetails GetUserDetailsById(Guid id);
-        CorporateUserDetails GetCorporateUserDetailsById(Guid id);
-        void InsertUserDetails(UserDetails userDetails);
-        void UpdateUserDetails(UserDetails oldUserDetails, UserDetails newUserDetails);
-        void InserCorporatetUserDetails(CorporateUserDetails corporateUserDetails);
-        void UpdateCorporateUserDetails(CorporateUserDetails corporateUserDetails, CorporateUserDetails newCorporateUserDetails);
-        UserDetails DeleteUserDetails(Guid id);
+        Task<List<UserDetailsDto>> GetUserDetails();
+        Task<List<CorporateUserDetailsDto>> GetCorporateUserDetails();
+        Task<UserDetailsDto> GetUserDetailsById(Guid id);
+        Task<CorporateUserDetailsDto> GetCorporateUserDetailsById(Guid id);
+        Task InsertUserDetails(UserMutationDto userDetails);
+        Task UpdateUserDetails(UserMutationDto newUserDetails, Guid id);
+        Task InserCorporatetUserDetails(CorporateUserDetailsMutationDto corporateUserDetails);
+        Task UpdateCorporateUserDetails(CorporateUserDetails newCorporateUserDetails, Guid id);
+        Task DeleteUserDetails(Guid id);
     }
 }
