@@ -1,0 +1,21 @@
+﻿using ProfileService.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace UserService.Service.ProfileServiceApi
+{
+    interface IProfileService
+    {
+        List<UserDetails> GetUserDetails();
+        List<CorporateUserDetails> GetCorporateUserDetails();
+        UserDetails GetUserDetailsById(Guid id);
+        CorporateUserDetails GetCorporateUserDetailsById(Guid id);
+        void InsertUserDetails(UserDetails userDetails);
+        void UpdateUserDetails(UserDetails oldUserDetails, UserDetails newUserDetails);
+        void InserCorporatetUserDetails(CorporateUserDetails corporateUserDetails);
+        void UpdateCorporateUserDetails(CorporateUserDetails corporateUserDetails, CorporateUserDetails newCorporateUserDetails);
+        UserDetails DeleteUserDetails(Guid id);
+    }
+}
