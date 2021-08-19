@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UserService.Dtos;
 using UserService.Entities;
+using UserService.Models.Dtos.User;
 using UserService.Service.Role;
 using UserService.Service.User;
 
@@ -18,10 +19,10 @@ namespace UserService.Controllers
     public class ApplicationUsersController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IUserService _userService;
+        private readonly IUsersService _userService;
         private readonly IRoleService _roleService;
 
-        public ApplicationUsersController(IMapper mapper, IUserService userService, IRoleService roleService)
+        public ApplicationUsersController(IMapper mapper, IUsersService userService, IRoleService roleService)
         {
             _mapper = mapper;
             _userService = userService;
@@ -31,46 +32,27 @@ namespace UserService.Controllers
 
         // GET: api/ApplicationUsers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(string userType)
         {
             try
             {
                 if (string.IsNullOrEmpty(userType))
                 {
-                    List<Corporation> corporations = _coroprationUsersService.GetUsers(city, username);
-                    List<PersonalUser> personalUsers = _personalUsersService.GetUsers(city, username);
-                    List<UserInfoDto> users = new List<UserInfoDto>();
-                    users.AddRange(_mapper.Map<List<UserInfoDto>>(personalUsers));
-                    users.AddRange(_mapper.Map<List<UserInfoDto>>(corporations));
-                    if (users.Count == 0)
-                    {
-                        return NoContent();
-                    }
+                    var users = _userService.GetUsers();
                     return Ok(users);
                 }
                 else
                 {
-                    if (string.Equals(userType, "personalUser"))
+                    switch (userType)
                     {
-                        List<PersonalUser> personalUsers = _personalUsersService.GetUsers(city, username);
-                        if (personalUsers == null || personalUsers.Count == 0)
-                        {
-                            return NoContent();
-                        }
-                        return Ok(_mapper.Map<List<UserInfoDto>>(personalUsers));
-                    }
-                    else if (string.Equals(userType, "corporationUser"))
-                    {
-                        List<Corporation> corporations = _coroprationUsersService.GetUsers(city, username);
-                        if (corporations == null || corporations.Count == 0)
-                        {
-                            return NoContent();
-                        }
-                        return Ok(_mapper.Map<List<UserInfoDto>>(corporations));
-                    }
-                    else
-                    {
-                        return NoContent();
+                        case "corporate":
+                            return _userService.GetCorporateUsers();
+                        case "personal":
+                            return _userService.GetPersonalUsers();
+                        case "admin":
+                            return _userService.GetAdmins();
+                        default:
+                            return StatusCode(StatusCodes.Status500InternalServerError, "Invalid user type (Corporate, Personal or Admin)");
                     }
                 }
             }
@@ -79,82 +61,99 @@ namespace UserService.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+            //}
 
-        // GET: api/ApplicationUsers/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ApplicationUser>> GetApplicationUser(Guid id)
+            //// GET: api/ApplicationUsers/5
+            //[HttpGet("{id}")]
+            //public async Task<ActionResult<ApplicationUser>> GetApplicationUser(Guid id)
+            //{
+            //    var applicationUser = await _context.Users.FindAsync(id);
+
+            //    if (applicationUser == null)
+            //    {
+            //        return NotFound();
+            //    }
+
+            //    return applicationUser;
+            //}
+
+            //// PUT: api/ApplicationUsers/5
+            //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+            //[HttpPut("{id}")]
+            //public async Task<IActionResult> PutApplicationUser(Guid id, ApplicationUser applicationUser)
+            //{
+            //    if (id != applicationUser.Id)
+            //    {
+            //        return BadRequest();
+            //    }
+
+            //    _context.Entry(applicationUser).State = EntityState.Modified;
+
+            //    try
+            //    {
+            //        await _context.SaveChangesAsync();
+            //    }
+            //    catch (DbUpdateConcurrencyException)
+            //    {
+            //        if (!ApplicationUserExists(id))
+            //        {
+            //            return NotFound();
+            //        }
+            //        else
+            //        {
+            //            throw;
+            //        }
+            //    }
+
+            //    return NoContent();
+            //}
+
+            // POST: api/ApplicationUsers
+            // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+            [HttpPost]
+        public ActionResult<ApplicationUser> PostApplicationUser(UserCreateDto user)
         {
-            var applicationUser = await _context.Users.FindAsync(id);
-
-            if (applicationUser == null)
-            {
-                return NotFound();
-            }
-
-            return applicationUser;
-        }
-
-        // PUT: api/ApplicationUsers/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutApplicationUser(Guid id, ApplicationUser applicationUser)
-        {
-            if (id != applicationUser.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(applicationUser).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ApplicationUserExists(id))
+                var pass = user.Password;
+                var userEntity = _mapper.Map<ApplicationUser>(user);
+                switch (user.UserType.ToLower())
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
+                    case "corporate":
+                        return _userService.CreateCorporateUser(userEntity, user.CorporateUserDetailsDto, pass);
+                    case "personal":
+                        return _userService.CreatePersonalUser(userEntity, user.UserDetails, pass);
+                    case "admin":
+                        return _userService.CreateAdminUser(userEntity, user.UserDetails, pass);
+                    default:
+                        return StatusCode(StatusCodes.Status500InternalServerError, "Invalid user type (Corporate, Personal or Admin)");
                 }
             }
-
-            return NoContent();
-        }
-
-        // POST: api/ApplicationUsers
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<ApplicationUser>> PostApplicationUser(ApplicationUser applicationUser)
-        {
-            _context.Users.Add(applicationUser);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetApplicationUser", new { id = applicationUser.Id }, applicationUser);
-        }
-
-        // DELETE: api/ApplicationUsers/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteApplicationUser(Guid id)
-        {
-            var applicationUser = await _context.Users.FindAsync(id);
-            if (applicationUser == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
-
-            _context.Users.Remove(applicationUser);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
-        private bool ApplicationUserExists(Guid id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
+        //// DELETE: api/ApplicationUsers/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteApplicationUser(Guid id)
+        //{
+        //    var applicationUser = await _context.Users.FindAsync(id);
+        //    if (applicationUser == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    _context.Users.Remove(applicationUser);
+        //    await _context.SaveChangesAsync();
+
+        //    return NoContent();
+        //}
+
+        //private bool ApplicationUserExists(Guid id)
+        //{
+        //    return _context.Users.Any(e => e.Id == id);
+        //}
     }
 }

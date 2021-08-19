@@ -37,12 +37,6 @@ namespace UserService.Dtos
         public string Password { get; set; }
 
         /// <summary>
-        /// User's role in the system 
-        /// used for authorization
-        /// </summary>
-        public string Role { get; set; }
-
-        /// <summary>
         /// User's email
         /// </summary>
         public string Email { get; set; }

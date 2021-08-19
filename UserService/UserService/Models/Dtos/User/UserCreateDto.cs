@@ -14,11 +14,11 @@ namespace UserService.Models.Dtos.User
         /// </summary>
         public string Username { get; set; }
 
+
         /// <summary>
-        /// User's role in the system 
-        /// used for authorization
+        /// Users password
         /// </summary>
-        public string Role { get; set; }
+        public string Password { get; set; }
 
         /// <summary>
         /// User's email

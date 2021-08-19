@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UserService.Service.ProfileServiceApi
 {
-    interface IProfileService
+    public interface IProfilesServiceApi
     {
         Task<List<UserDetailsDto>> GetUserDetails();
         Task<List<CorporateUserDetailsDto>> GetCorporateUserDetails();
@@ -16,7 +16,7 @@ namespace UserService.Service.ProfileServiceApi
         Task InsertUserDetails(UserMutationDto userDetails);
         Task UpdateUserDetails(UserMutationDto newUserDetails, Guid id);
         Task InserCorporatetUserDetails(CorporateUserDetailsMutationDto corporateUserDetails);
-        Task UpdateCorporateUserDetails(CorporateUserDetails newCorporateUserDetails, Guid id);
+        Task UpdateCorporateUserDetails(CorporateUserDetailsMutationDto newCorporateUserDetails, Guid id);
         Task DeleteUserDetails(Guid id);
     }
 }

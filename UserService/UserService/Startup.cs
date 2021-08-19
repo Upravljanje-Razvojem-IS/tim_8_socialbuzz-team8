@@ -11,11 +11,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 using UserService.Data;
 using UserService.Entities;
+using UserService.Service;
+using UserService.Service.ProfileServiceApi;
 using UserService.Service.Role;
+using UserService.Service.User;
 
 namespace UserService
 {
@@ -55,7 +56,11 @@ namespace UserService
 
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+            services.AddHttpClient<ProfilesServiceApi>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IProfilesServiceApi, ProfilesServiceApi>();
+            services.AddScoped<IUsersService, UsersService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -49,11 +49,11 @@ namespace UserService.Dtos
         /// <summary>
         /// Model of personal user profile info
         /// </summary>
-        public UserMutationDto? UserDetails { get; set; }
+        public UserDetailsDto? UserDetails { get; set; }
 
         /// <summary>
         /// Model of corporate user profile info
         /// </summary>
-        public CorporateUserDetailsMutationDto? CorporateUserDetailsDto { get; set; }
+        public CorporateUserDetailsDto? CorporateUserDetailsDto { get; set; }
     }
 }

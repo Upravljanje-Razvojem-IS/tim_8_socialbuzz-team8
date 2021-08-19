@@ -27,14 +27,17 @@ namespace ProfileService.Data
             modelBuilder.Entity<CorporateUserDetails>()
                 .HasIndex(cu => cu.Pib)
                 .IsUnique();
+            modelBuilder.Entity<UserDetails>()
+              .HasIndex(u => u.Username)
+              .IsUnique();
         }
 
         //public DbSet<AuthInfo> AuthInfo { get; set; }
-        public DbSet<UserDetails> UserDetails {get; set;}
+        public DbSet<UserDetails> UserDetails { get; set; }
         public DbSet<City> City { get; set; }
         public DbSet<Country> Country { get; set; }
         public DbSet<CorporateUserDetails> CorporateUserDetails { get; set; }
-        
+
     }
 
 }

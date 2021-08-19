@@ -45,6 +45,7 @@ namespace ProfileService.Migrations
                 columns: table => new
                 {
                     UserDetailsID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Adress = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -78,6 +79,19 @@ namespace ProfileService.Migrations
                 name: "IX_UserDetails_CityId",
                 table: "UserDetails",
                 column: "CityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserDetails_Pib",
+                table: "UserDetails",
+                column: "Pib",
+                unique: true,
+                filter: "[Pib] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserDetails_Username",
+                table: "UserDetails",
+                column: "Username",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

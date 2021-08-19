@@ -26,9 +26,16 @@ namespace ProfileService.Repository.UserDetailsRepository
 
         public CorporateUserDetails GetCorporateUserDetailsById(Guid id)
         {
-            return Query.OfType<CorporateUserDetails>()
-                .Where(cud => cud.UserDetailsID == id)
-               .ToList()[0];
+            var b = Query.OfType<CorporateUserDetails>()
+                .Where(cud => cud.UserDetailsID == id);
+            if(!b.Any())
+            {
+                return null;
+            }
+            else
+            {
+                return b.First(); 
+            }
         }
 
         public List<UserDetails> GetUserDetails()

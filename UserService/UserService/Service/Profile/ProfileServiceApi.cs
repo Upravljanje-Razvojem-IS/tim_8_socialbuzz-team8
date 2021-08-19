@@ -6,18 +6,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace UserService.Service.ProfileServiceApi
 {
-    public class ProfileService : IProfileService
+    public class ProfilesServiceApi : IProfilesServiceApi
     {
         private readonly HttpClient _profileService;
         private const string API = "http://localhost:10498/api/";
         private const string CORPORATE_USER_DETAILS = "CorporateUserDetails/";
         private const string USER_DETAILS = "UserDetails/";
 
-        public ProfileService(HttpClient profileService)
+        public ProfilesServiceApi(HttpClient profileService)
         {
             _profileService = profileService;
             _profileService.DefaultRequestHeaders.Accept.Clear();
@@ -76,8 +77,8 @@ namespace UserService.Service.ProfileServiceApi
 
         public async Task InserCorporatetUserDetails(CorporateUserDetailsMutationDto corporateUserDetails)
         {
-            HttpContent postContent = new StringContent(JsonConvert.SerializeObject(corporateUserDetails));
-            HttpResponseMessage res = await _profileService.PostAsJsonAsync(API + CORPORATE_USER_DETAILS, postContent);
+            //HttpContent postContent = new StringContent(content:JsonConvert.SerializeObject(corporateUserDetails), encoding: Encoding.UTF8, mediaType: "application/json");
+            HttpResponseMessage res = await _profileService.PostAsJsonAsync<CorporateUserDetailsMutationDto>(API + CORPORATE_USER_DETAILS, corporateUserDetails);
             if (!res.IsSuccessStatusCode)
             {
                 throw new Exception(res.Content.ToString());
@@ -86,15 +87,15 @@ namespace UserService.Service.ProfileServiceApi
 
         public async Task InsertUserDetails(UserMutationDto userDetails)
         {
-            HttpContent postContent = new StringContent(JsonConvert.SerializeObject(userDetails));
-            HttpResponseMessage res = await _profileService.PutAsJsonAsync(API + USER_DETAILS, postContent);
+            //HttpContent postContent = new StringContent(content: JsonConvert.SerializeObject(userDetails), encoding: Encoding.UTF8, mediaType: "application/json");
+            HttpResponseMessage res = await _profileService.PostAsJsonAsync<UserMutationDto>(API + USER_DETAILS, userDetails);
             if (!res.IsSuccessStatusCode)
             {
                 throw new Exception(res.Content.ToString());
             }
         }
 
-        public async Task UpdateCorporateUserDetails(CorporateUserDetails newCorporateUserDetails, Guid id)
+        public async Task UpdateCorporateUserDetails(CorporateUserDetailsMutationDto newCorporateUserDetails, Guid id)
         {
             HttpContent putContent = new StringContent(JsonConvert.SerializeObject(newCorporateUserDetails));
             HttpResponseMessage res = await _profileService.PutAsJsonAsync(API + CORPORATE_USER_DETAILS + id, putContent);

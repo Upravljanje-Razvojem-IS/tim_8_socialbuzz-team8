@@ -20,6 +20,12 @@ namespace ProfileService.Models
         public Guid UserDetailsID { get; set; }
 
         /// <summary>
+        /// Unique identifier for the user
+        /// </summary>
+        [Required]
+        public string Username { get; set; }
+
+        /// <summary>
         /// Users first name
         /// </summary>
         [Required]

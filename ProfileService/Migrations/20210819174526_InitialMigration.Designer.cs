@@ -10,7 +10,7 @@ using ProfileService.Data;
 namespace ProfileService.Migrations
 {
     [DbContext(typeof(ProfileDbContext))]
-    [Migration("20210726202525_InitialMigration")]
+    [Migration("20210819174526_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -18,7 +18,7 @@ namespace ProfileService.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.8")
+                .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("ProfileService.Models.City", b =>
@@ -107,9 +107,16 @@ namespace ProfileService.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("UserDetailsID");
 
                     b.HasIndex("CityId");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("UserDetails");
 
@@ -132,6 +139,10 @@ namespace ProfileService.Migrations
                         .IsRequired()
                         .HasMaxLength(8)
                         .HasColumnType("nvarchar(8)");
+
+                    b.HasIndex("Pib")
+                        .IsUnique()
+                        .HasFilter("[Pib] IS NOT NULL");
 
                     b.HasDiscriminator().HasValue("CorporateUserDetails");
                 });
