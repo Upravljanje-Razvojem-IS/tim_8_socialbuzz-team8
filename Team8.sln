@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductsAndServices", "Prod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messaging", "Messaging\Messaging.csproj", "{EDFB75B2-1B57-4006-BFB0-E188E571F5B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comments", "Comments\Comments.csproj", "{39DD6F79-FEB0-48FA-945F-5E5D6DA4FC06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Comments", "Comments\Comments.csproj", "{39DD6F79-FEB0-48FA-945F-5E5D6DA4FC06}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfileService", "ProfileService\ProfileService.csproj", "{344D24A1-8A87-4A73-BBC7-A4147D5391FA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService", "..\..\tim8-socialbuzz\UserService\UserService\UserService.csproj", "{6E4BFADE-4EEC-40B2-AEBF-9C6968D09598}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{39DD6F79-FEB0-48FA-945F-5E5D6DA4FC06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39DD6F79-FEB0-48FA-945F-5E5D6DA4FC06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39DD6F79-FEB0-48FA-945F-5E5D6DA4FC06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{344D24A1-8A87-4A73-BBC7-A4147D5391FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{344D24A1-8A87-4A73-BBC7-A4147D5391FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{344D24A1-8A87-4A73-BBC7-A4147D5391FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{344D24A1-8A87-4A73-BBC7-A4147D5391FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E4BFADE-4EEC-40B2-AEBF-9C6968D09598}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E4BFADE-4EEC-40B2-AEBF-9C6968D09598}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E4BFADE-4EEC-40B2-AEBF-9C6968D09598}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E4BFADE-4EEC-40B2-AEBF-9C6968D09598}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
