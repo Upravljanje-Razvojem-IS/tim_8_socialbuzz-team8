@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -91,6 +92,7 @@ namespace ProfileService.Controllers
         /// <response code="401">Unauthorized user</response>
         /// <response code="500">Error on the server while updating</response>
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutCorporateUserDetails(Guid id, CorporateUserDetailsMutationDto newCorporateUserDetailsDto)
         {
             try
@@ -153,6 +155,7 @@ namespace ProfileService.Controllers
         /// <response code="404">User with userId not found</response>
         /// <response code="500">Error on the server while deleting</response>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteCorporateUserDetails(Guid id)
         {
             try

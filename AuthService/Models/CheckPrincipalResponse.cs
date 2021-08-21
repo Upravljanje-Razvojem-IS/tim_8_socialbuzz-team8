@@ -7,7 +7,7 @@ namespace AuthService.Models
 {
     public class CheckPrincipalResponse
     {
-        public bool Succes { get; set; }
+        public bool Success { get; set; }
 
         /// <summary>
         ///Message if autentication is succesful

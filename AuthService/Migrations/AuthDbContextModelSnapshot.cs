@@ -21,30 +21,22 @@ namespace AuthService.Migrations
 
             modelBuilder.Entity("AuthService.Entities.AuthInfo", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("UserId");
-
-                    b.Property<string>("PrivateToken")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("PrivateToken");
-
-                    b.Property<string>("PublicToken")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("PublicToken");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Role");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("TimeOfIssuingPublicToken")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("TimeOfIssuingPublicToken");
+                    b.Property<DateTime>("TimeOfIssuingToken")
+                        .HasColumnType("datetime2");
 
-                    b.HasKey("UserId");
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("AuthInfo");
                 });

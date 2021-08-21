@@ -68,7 +68,10 @@ namespace AuthService
                    };
                });
 
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthService", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -84,14 +87,10 @@ namespace AuthService
 
             app.UseSwagger();
 
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AuthService v1"));
+
+
             app.UseDeveloperExceptionPage();
-
-
-            app.UseSwaggerUI(setupAction =>
-            {
-                setupAction.SwaggerEndpoint("/swagger/AuthServiceOpenApiSpecification/swagger.json", "Auth Service API");
-                setupAction.RoutePrefix = "";
-            });
 
             app.UseRouting();
 

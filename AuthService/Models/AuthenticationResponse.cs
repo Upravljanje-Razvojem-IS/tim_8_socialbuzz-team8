@@ -19,7 +19,7 @@ namespace AuthService.Models
         /// <summary>
         /// Bool value which indicates if autentication is successful
         /// </summary>
-        public bool Succes { get; set; }
+        public bool Success { get; set; }
 
         /// <summary>
         /// List of authentication errors 

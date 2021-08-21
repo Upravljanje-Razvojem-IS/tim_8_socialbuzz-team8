@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +13,12 @@ using ProfileService.Models.Dto;
 using ProfileService.Service;
 
 namespace ProfileService.Controllers
-{
+{  /// <summary>
+   /// Contoller with endopoints for handling crud operations for city entity 
+   /// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CitiesController : ControllerBase
     {
         private readonly ICityService _cityService;
@@ -34,9 +38,9 @@ namespace ProfileService.Controllers
         /// </summary>
         /// <returns>List of cities</returns>
         /// <response code="200">Returns the list</response>
-        /// <response code="401">Unauthorized user</response>
         /// <response code="500">Error on the server</response>
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<CityDto>>> GetCities()
         {
             try
@@ -57,10 +61,10 @@ namespace ProfileService.Controllers
         /// <param name="id">City Id</param>
         /// <returns>City with cityId</returns>
         ///<response code="200">Returns the city</response>
-        /// <response code="401">Unauthorized user</response>
         /// <response code="404">City with cityId is not found</response>
         /// <response code="500">Error on the server</response>
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<CityDto>> GetCity(Guid id)
         {
             try
@@ -91,6 +95,7 @@ namespace ProfileService.Controllers
         /// <response code="401">Unauthorized user</response>
         /// <response code="500">Error on the server</response>
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> PutCity(Guid id, CityMutationDto newCity)
         {
             var cityToUpdate = _cityService.GetCityById(id);
@@ -123,9 +128,11 @@ namespace ProfileService.Controllers
         /// <param name="city">Dto model of a city</param>
         /// <returns>Confirmation of the creation of city</returns>
         /// <response code="201">City created</response>
+        /// <response code="400">Country with given id doesn't exist </response>
         /// <response code="401">Unauthorized user</response>
         /// <response code="500">There was an error on the server</response>
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<CityDto>> PostCity(CityMutationDto city)
         {
             var cityForCreation = _mapper.Map<City>(city);
@@ -154,6 +161,7 @@ namespace ProfileService.Controllers
         /// <response code="400">City with cityId not found</response>
         /// <response code="500">Error on the server while deleting</response>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteCity(Guid id)
         {
             var city = _cityService.GetCityById(id);

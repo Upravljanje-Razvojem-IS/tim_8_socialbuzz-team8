@@ -15,6 +15,7 @@ namespace AuthService.Controllers
     /// </summary>
     [Consumes("application/json")]
     [Produces("application/json")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -32,7 +33,8 @@ namespace AuthService.Controllers
         /// <response code="200">Token</response>
         ///<response code="400">Wrong information for principal</response>
         /// <response code="500">Error on the server</response>
-        [HttpPost("api/login")]
+        [Route("/login")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -41,7 +43,7 @@ namespace AuthService.Controllers
             try
             {
                 var authResponse = authService.Login(principal);
-                if (authResponse.Result.Succes)
+                if (authResponse.Result.Success)
                 {
                     return Ok(new LoginSuccesResponse
                     {
@@ -62,7 +64,7 @@ namespace AuthService.Controllers
         }
         
         /// <summary>
-        /// Clearing info from database about once logged in user
+        /// Deleting session data
         /// </summary>
         /// <returns>Status 200</returns>
         /// <response code="200"></response>
@@ -71,7 +73,8 @@ namespace AuthService.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpPost("api/logout")]
+        [Route("/logout")]
+        [HttpPost]
         public IActionResult Logout(LogoutRequest body)
         {
             try

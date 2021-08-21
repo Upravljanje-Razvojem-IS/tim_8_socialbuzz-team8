@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AuthService.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,15 +11,14 @@ namespace AuthService.Migrations
                 name: "AuthInfo",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TimeOfIssuingPublicToken = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PublicToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PrivateToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TimeOfIssuingToken = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AuthInfo", x => x.UserId);
+                    table.PrimaryKey("PK_AuthInfo", x => x.Id);
                 });
         }
 

@@ -23,7 +23,7 @@ namespace AuthService.Services
         private readonly IConfiguration _configuration;
         private readonly JwtSettings _jwtSettings;
         private readonly IAuthInfoRepository _authRepository;
-        private readonly string _userServiceUrl = "http://localhost:60001/api/ApplicationUsers";
+        private readonly string _userServiceUrl = "http://localhost:60001/api/Accounts";
 
         public AuthenticationService(IConfiguration configuration, JwtSettings jwtSettings, IAuthInfoRepository authRepository)
         {
@@ -70,12 +70,12 @@ namespace AuthService.Services
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage response = client.PostAsJsonAsync<Principal>(_userServiceUrl, principal).Result;
+                HttpResponseMessage response = client.PostAsJsonAsync(_userServiceUrl, principal).Result;
                 CheckPrincipalResponse res = await response.Content.ReadFromJsonAsync<CheckPrincipalResponse>();
                 if (!response.IsSuccessStatusCode)
                 {
                     return new AuthenticationResponse {
-                        Succes = false,
+                        Success = false,
                         Error = res.Message.ToString() 
                     };
                 }
@@ -88,8 +88,8 @@ namespace AuthService.Services
                 {
                     return new AuthenticationResponse
                     {
-                        Token = IssueToken(user.Id.ToString(), user.Role),
-                        Succes = true
+                        Token = user.Token,
+                        Success = true
                     };
                 }
                 var token = IssueToken(id.ToString(), role);
@@ -104,7 +104,7 @@ namespace AuthService.Services
                 return new AuthenticationResponse
                 {
                     Token = token,
-                    Succes = true
+                    Success = true
                 };               
             }
 

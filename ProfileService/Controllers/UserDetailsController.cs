@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,9 @@ using ProfileService.Service.UserDetailsService;
 
 namespace ProfileService.Controllers
 {
+    /// <summary>
+    /// Contoller with endopoints for handling crud operations for user profiles 
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class UserDetailsController : ControllerBase
@@ -91,6 +95,7 @@ namespace ProfileService.Controllers
         /// <response code="401">Unauthorized user</response>
         /// <response code="500">Error on the server while updating</response>
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutUserDetails(Guid id, UserMutationDto newUserDetailsDto)
         {
             try
@@ -151,9 +156,11 @@ namespace ProfileService.Controllers
         /// <param name="id">User's Id</param>
         /// <returns>Status 204 (NoContent)</returns>
         /// <response code="204">User succesfully deleted</response>
+        /// <response code="401">Unauthorized user</response>
         /// <response code="404">User with userId not found</response>
         /// <response code="500">Error on the server while deleting</response>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteUserDetails(Guid id)
         {
             try
