@@ -32,13 +32,6 @@ namespace UserService.Models.Dtos.User
         public string UserType { get; set; }
 
         /// <summary>
-        /// Boolean value which indicates if user's account
-        /// is active
-        /// </summary>
-        public Boolean IsActive { get; set; }
-
-
-        /// <summary>
         /// Model of personal user profile info
         /// </summary>
         public UserMutationDto? UserDetails { get; set; }

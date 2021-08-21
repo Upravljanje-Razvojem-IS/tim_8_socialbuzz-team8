@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,12 @@ using UserService.Service.Role;
 
 namespace UserService.Controllers
 {
+
+    /// <summary>
+    /// Contoller with endopoints for handling crud operations for roles
+    /// </summary>
     [Route("api/[controller]")]
+    [Authorize(Roles = "Administrator")]
     [ApiController]
     public class ApplicationRolesController : ControllerBase
     {

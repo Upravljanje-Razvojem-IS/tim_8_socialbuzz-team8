@@ -3,10 +3,8 @@ using ProfileService.Models;
 using ProfileService.Models.Dto;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace UserService.Service.ProfileServiceApi
@@ -26,8 +24,9 @@ namespace UserService.Service.ProfileServiceApi
             new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task DeleteUserDetails(Guid id)
+        public async Task DeleteUserDetails(Guid id, string token)
         {
+            _profileService.DefaultRequestHeaders.Add("Authorization", token);
             HttpResponseMessage res = await _profileService.DeleteAsync(API + USER_DETAILS + id.ToString());
             if(!res.IsSuccessStatusCode)
             {
@@ -50,7 +49,7 @@ namespace UserService.Service.ProfileServiceApi
             HttpResponseMessage res = await _profileService.GetAsync(API + CORPORATE_USER_DETAILS + id);
             if (!res.IsSuccessStatusCode)
             {
-                throw new Exception(res.Content.ToString());
+                return null;
             }
             return await res.Content.ReadAsAsync<CorporateUserDetailsDto>();
         }
@@ -70,14 +69,13 @@ namespace UserService.Service.ProfileServiceApi
             HttpResponseMessage res = await _profileService.GetAsync(API + USER_DETAILS + id);
             if (!res.IsSuccessStatusCode)
             {
-                throw new Exception(res.Content.ToString());
+                return null;
             }
             return await res.Content.ReadAsAsync<UserDetailsDto>();
         }
 
         public async Task InserCorporatetUserDetails(CorporateUserDetailsMutationDto corporateUserDetails)
         {
-            //HttpContent postContent = new StringContent(content:JsonConvert.SerializeObject(corporateUserDetails), encoding: Encoding.UTF8, mediaType: "application/json");
             HttpResponseMessage res = await _profileService.PostAsJsonAsync<CorporateUserDetailsMutationDto>(API + CORPORATE_USER_DETAILS, corporateUserDetails);
             if (!res.IsSuccessStatusCode)
             {
@@ -87,7 +85,6 @@ namespace UserService.Service.ProfileServiceApi
 
         public async Task InsertUserDetails(UserMutationDto userDetails)
         {
-            //HttpContent postContent = new StringContent(content: JsonConvert.SerializeObject(userDetails), encoding: Encoding.UTF8, mediaType: "application/json");
             HttpResponseMessage res = await _profileService.PostAsJsonAsync<UserMutationDto>(API + USER_DETAILS, userDetails);
             if (!res.IsSuccessStatusCode)
             {
@@ -95,20 +92,20 @@ namespace UserService.Service.ProfileServiceApi
             }
         }
 
-        public async Task UpdateCorporateUserDetails(CorporateUserDetailsMutationDto newCorporateUserDetails, Guid id)
+        public async Task UpdateCorporateUserDetails(CorporateUserDetailsMutationDto newCorporateUserDetails, Guid id, string token)
         {
-            HttpContent putContent = new StringContent(JsonConvert.SerializeObject(newCorporateUserDetails));
-            HttpResponseMessage res = await _profileService.PutAsJsonAsync(API + CORPORATE_USER_DETAILS + id, putContent);
+            _profileService.DefaultRequestHeaders.Add("Authorization", token);
+            HttpResponseMessage res = await _profileService.PutAsJsonAsync< CorporateUserDetailsMutationDto>(API + CORPORATE_USER_DETAILS + id, newCorporateUserDetails);
             if (!res.IsSuccessStatusCode)
             {
                 throw new Exception(res.Content.ToString());
             }
         }
 
-        public async Task UpdateUserDetails(UserMutationDto newUserDetails, Guid id)
+        public async Task UpdateUserDetails(UserMutationDto newUserDetails, Guid id, string token)
         {
-            HttpContent putContent = new StringContent(JsonConvert.SerializeObject(newUserDetails));
-            HttpResponseMessage res = await _profileService.PutAsJsonAsync(API + USER_DETAILS + id, putContent);
+            _profileService.DefaultRequestHeaders.Add("Authorization", token);
+            HttpResponseMessage res = await _profileService.PutAsJsonAsync<UserMutationDto>(API + USER_DETAILS + id, newUserDetails);
             if (!res.IsSuccessStatusCode)
             {
                 throw new Exception(res.Content.ToString());

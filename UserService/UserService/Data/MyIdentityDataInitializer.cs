@@ -8,7 +8,7 @@ using UserService.Models;
 
 namespace UserService.Data
 {
-    public class MyIdentityDataInitializer
+    public static class MyIdentityDataInitializer
     {
         public static void SeedUsersAndRoles (UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
