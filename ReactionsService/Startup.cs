@@ -35,7 +35,6 @@ namespace ReactionsService
             });
             string ConnectionString = this.Configuration.GetConnectionString("ReactionsService");
             services.AddDbContext<ReactionsContext>(options => options.UseSqlServer(ConnectionString));
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
