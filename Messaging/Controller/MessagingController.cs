@@ -8,6 +8,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Messaging.Entity.DTO;
 using Messaging.Mocks;
+using ServicesCommunication.Logger;
 
 namespace Messaging.Controller
 {
@@ -19,6 +20,7 @@ namespace Messaging.Controller
     {
         private readonly MessagingContext _context;
         private readonly IUserMock _user;
+        private readonly LoggerCommunication _loggerCommunication;
 
 
         public MessagingController(MessagingContext context, IUserMock user)
@@ -136,6 +138,8 @@ namespace Messaging.Controller
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
 
+            this._loggerCommunication.logAction("Deleted a chat with id:" + id);
+
             return StatusCode(StatusCodes.Status202Accepted, new JsonResult(chat));
         }
 
@@ -187,6 +191,8 @@ namespace Messaging.Controller
             {
                 return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
             }
+
+            this._loggerCommunication.logAction("Created a new chat");
 
             return StatusCode(StatusCodes.Status201Created, new JsonResult(chat));
         }
@@ -243,6 +249,8 @@ namespace Messaging.Controller
             {
                 return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
             }
+
+            this._loggerCommunication.logAction("Updated a chat with id:" + id);
 
             return StatusCode(StatusCodes.Status202Accepted, new JsonResult(chat));
         }
@@ -360,6 +368,8 @@ namespace Messaging.Controller
                 return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
             }
 
+            this._loggerCommunication.logAction("Added a new user to a chat");
+
             return StatusCode(StatusCodes.Status201Created, new JsonResult(chat.ChatUsers));
         }
 
@@ -423,6 +433,8 @@ namespace Messaging.Controller
             {
                 return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
             }
+
+            this._loggerCommunication.logAction("Deleted a user from a chat");
 
             return StatusCode(StatusCodes.Status202Accepted, new JsonResult(chat.ChatUsers));
         }

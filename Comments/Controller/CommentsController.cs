@@ -5,6 +5,7 @@ using Comments.Entities.Mocks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ServicesCommunication.Logger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace Comments.Controller
     {
         private readonly CommentsContext _context;
         private readonly IUserMock _user;
+        private readonly LoggerCommunication _loggerCommunication;
 
         public CommentsController(CommentsContext context, IUserMock user)
         {
@@ -101,6 +103,8 @@ namespace Comments.Controller
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
 
+            this._loggerCommunication.logAction("Deleted a comment with id:" + id);
+
             return StatusCode(StatusCodes.Status202Accepted, new JsonResult(deletedComment));
         }
 
@@ -134,6 +138,8 @@ namespace Comments.Controller
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
+
+            this._loggerCommunication.logAction("Created a new comment");
 
             return StatusCode(StatusCodes.Status201Created, new JsonResult(newComment));
         }
@@ -174,6 +180,8 @@ namespace Comments.Controller
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
+
+            this._loggerCommunication.logAction("Updated a comment with id:" + id);
 
             return StatusCode(StatusCodes.Status202Accepted, new JsonResult(currentComment));
         }
