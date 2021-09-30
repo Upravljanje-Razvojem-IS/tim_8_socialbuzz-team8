@@ -62,7 +62,7 @@ namespace ReactionsService.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult CreateReactionType([FromBody] ReactionTypeDTO reactionType, [FromHeader] int UserId, [FromHeader] string UserRole)
         {
-            if (_user.GetUserById(UserId) == null && UserRole != "Admin")
+            if (_user.GetUserById(UserId) == null || UserRole != "Admin")
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
@@ -100,7 +100,7 @@ namespace ReactionsService.Controllers
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
-            if (_user.GetUserById(UserId) == null && UserRole != "Admin")
+            if (_user.GetUserById(UserId) == null || UserRole != "Admin")
             {
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
@@ -129,7 +129,7 @@ namespace ReactionsService.Controllers
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
-            if(_user.GetUserById(UserID) == null && UserRole != "Admin")
+            if(_user.GetUserById(UserID) == null || UserRole != "Admin")
             {
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
@@ -162,7 +162,12 @@ namespace ReactionsService.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult CreateReaction([FromBody] ReactionDTO reaction, [FromHeader] int UserId, [FromHeader] int PostId)
         {
-            if (_user.GetUserById(UserId) == null)
+            if (_user.GetUserById(UserId) == null || _post.GetPostById(PostId) == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+            var checkReaction = _context.Reactions.FirstOrDefault(u => u.PostId == PostId && u.CreatedByUserId == UserId);
+            if (checkReaction != null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
@@ -172,7 +177,12 @@ namespace ReactionsService.Controllers
                 PostId = PostId,
                 ReactionTypeID = reaction.ReactionTypeId
             };
+            
 
+            if (_context.ReactionTypes.Find(reaction.ReactionTypeId) == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
             _context.Reactions.Add(newReaction);
             var success = _context.SaveChanges();
 
@@ -196,11 +206,11 @@ namespace ReactionsService.Controllers
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
-            if (_user.GetUserById(UserID) == null && _post.GetPostById(PostID) == null)
+            if (_user.GetUserById(UserID) == null || _post.GetPostById(PostID) == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
-            if(UserID != currReaction.CreatedByUserId && PostID != currReaction.PostId)
+            if(UserID != currReaction.CreatedByUserId || PostID != currReaction.PostId)
             {
                 return StatusCode(StatusCodes.Status403Forbidden);
             }      
@@ -230,11 +240,11 @@ namespace ReactionsService.Controllers
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
-            if (_user.GetUserById(UserID) == null && UserID != currReaction.CreatedByUserId)
+            if (_user.GetUserById(UserID) == null || UserID != currReaction.CreatedByUserId)
             {
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
-            if(_post.GetPostById(PostID) == null && PostID != currReaction.PostId)
+            if(_post.GetPostById(PostID) == null || PostID != currReaction.PostId)
             {
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
