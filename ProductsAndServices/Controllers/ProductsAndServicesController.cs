@@ -6,7 +6,7 @@ using ProductsAndServices.Entity;
 using ProductsAndServices.Entity.DTO;
 using System.IO;
 using System.Linq;
-//using ServicesCommunication.Logger;
+using ServicesCommunication.Logger;
 
 namespace ProductsAndServices.Controllers
 {
@@ -18,12 +18,12 @@ namespace ProductsAndServices.Controllers
     {
 
         private readonly ProductsAndServicesContext _context;
-        //private readonly LoggerCommunication _loggerCommunication;
+        private readonly LoggerCommunication _loggerCommunication;
 
         public ProductsAndServicesController(ProductsAndServicesContext context)
         {
             this._context = context;
-            //this._loggerCommunication = new LoggerCommunication();
+            this._loggerCommunication = new LoggerCommunication();
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace ProductsAndServices.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
             
-            //this._loggerCommunication.logAction("Deleted a product/service with id:" + id);
+            this._loggerCommunication.logAction("Deleted a product/service with id:" + id);
 
             return StatusCode(StatusCodes.Status202Accepted, new JsonResult(deletedProductService));
         }
@@ -129,7 +129,7 @@ namespace ProductsAndServices.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
 
-            //this._loggerCommunication.logAction("Created a new product/service");
+            this._loggerCommunication.logAction("Created a new product/service");
 
             return StatusCode(StatusCodes.Status201Created, new JsonResult(newProductService));
         }
@@ -176,7 +176,7 @@ namespace ProductsAndServices.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
 
-            //this._loggerCommunication.logAction("Updated a product/service with id:" + id);
+            this._loggerCommunication.logAction("Updated a product/service with id:" + id);
 
             return StatusCode(StatusCodes.Status202Accepted, new JsonResult(currentProductService));
         }
@@ -244,7 +244,7 @@ namespace ProductsAndServices.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
 
-           // this._loggerCommunication.logAction("Created a new price");
+            this._loggerCommunication.logAction("Created a new price");
 
             return StatusCode(StatusCodes.Status201Created, new JsonResult(newProductServicePrice));
         }
@@ -293,7 +293,7 @@ namespace ProductsAndServices.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
 
-           // this._loggerCommunication.logAction("Deleted a price");
+            this._loggerCommunication.logAction("Deleted a price");
 
             return StatusCode(StatusCodes.Status202Accepted, new JsonResult(deletedProductServicePrice));
         }
@@ -396,7 +396,7 @@ namespace ProductsAndServices.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
 
-           // this._loggerCommunication.logAction("Uploaded a new picture");
+            this._loggerCommunication.logAction("Uploaded a new picture");
 
             return StatusCode(StatusCodes.Status201Created, new JsonResult(newProductServicePicture));
         }
@@ -445,7 +445,7 @@ namespace ProductsAndServices.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
 
-           // this._loggerCommunication.logAction("Deleted a pricture");
+            this._loggerCommunication.logAction("Deleted a pricture");
 
             return StatusCode(StatusCodes.Status202Accepted, new JsonResult(deletedProductServicePicture));
         }
