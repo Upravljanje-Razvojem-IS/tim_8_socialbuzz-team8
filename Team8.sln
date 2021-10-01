@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Comments", "Comments\Commen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfileService", "ProfileService\ProfileService.csproj", "{344D24A1-8A87-4A73-BBC7-A4147D5391FA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService", "..\..\tim8-socialbuzz\UserService\UserService\UserService.csproj", "{6E4BFADE-4EEC-40B2-AEBF-9C6968D09598}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D642C4B8-A344-4DF9-BA9A-87E180907C0C}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -22,7 +20,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthService", "AuthService\AuthService.csproj", "{3411F485-02FF-4F5C-B430-251FB8C33942}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactionsService", "ReactionsService\ReactionsService.csproj", "{C9B5CDAE-C583-4E74-9D0A-3D7FD4135CE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactionsService", "ReactionsService\ReactionsService.csproj", "{C9B5CDAE-C583-4E74-9D0A-3D7FD4135CE4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService", "UserService\UserService\UserService.csproj", "{F0CF7C41-607D-49ED-B90A-64485B8456B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,10 +50,6 @@ Global
 		{344D24A1-8A87-4A73-BBC7-A4147D5391FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{344D24A1-8A87-4A73-BBC7-A4147D5391FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{344D24A1-8A87-4A73-BBC7-A4147D5391FA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6E4BFADE-4EEC-40B2-AEBF-9C6968D09598}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6E4BFADE-4EEC-40B2-AEBF-9C6968D09598}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6E4BFADE-4EEC-40B2-AEBF-9C6968D09598}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6E4BFADE-4EEC-40B2-AEBF-9C6968D09598}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3411F485-02FF-4F5C-B430-251FB8C33942}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3411F485-02FF-4F5C-B430-251FB8C33942}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3411F485-02FF-4F5C-B430-251FB8C33942}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -62,6 +58,10 @@ Global
 		{C9B5CDAE-C583-4E74-9D0A-3D7FD4135CE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9B5CDAE-C583-4E74-9D0A-3D7FD4135CE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9B5CDAE-C583-4E74-9D0A-3D7FD4135CE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0CF7C41-607D-49ED-B90A-64485B8456B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0CF7C41-607D-49ED-B90A-64485B8456B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0CF7C41-607D-49ED-B90A-64485B8456B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0CF7C41-607D-49ED-B90A-64485B8456B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

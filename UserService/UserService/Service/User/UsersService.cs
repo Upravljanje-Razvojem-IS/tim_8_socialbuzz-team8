@@ -27,7 +27,6 @@ namespace UserService.Service.User
         public ApplicationUser CreateAdminUser(ApplicationUser user, UserMutationDto personalUserProfile, string password)
         {
             user.Id = Guid.NewGuid();
-            user.AccountIsActive = true;
             IdentityResult result = _userManager.CreateAsync(user, password).Result;
             if (result.Succeeded)
             {
@@ -48,7 +47,6 @@ namespace UserService.Service.User
         public ApplicationUser CreateCorporateUser(ApplicationUser user, CorporateUserDetailsMutationDto corporateUserProfile, string password)
         {
             user.Id = Guid.NewGuid();
-            user.AccountIsActive = true;
             IdentityResult result = _userManager.CreateAsync(user, password).Result;
             if (result.Succeeded)
             {
@@ -67,7 +65,6 @@ namespace UserService.Service.User
         public ApplicationUser CreatePersonalUser(ApplicationUser user, UserMutationDto personalUserProfile, string password)
         {
             user.Id = Guid.NewGuid();
-            user.AccountIsActive = true;
             IdentityResult result = _userManager.CreateAsync(user, password).Result;
             if (result.Succeeded)
             {
@@ -83,7 +80,7 @@ namespace UserService.Service.User
             }
         }
 
-        public void DeleteUser(Guid id, string token)
+        public void DeleteUser(Guid id)
         {
             var user = _userManager.FindByIdAsync(id.ToString()).Result;
             if (user == null)
@@ -93,18 +90,17 @@ namespace UserService.Service.User
             user.AccountIsActive = false;
             _userManager.UpdateAsync(user);
             var userProfiles = _profileService.GetUserDetails().Result;
-            var prof= userProfiles.Find(u => u.Username == user.UserName);
-            if(prof!=null)
-                _profileService.DeleteUserDetails(prof.UserDetailsID, token).Wait();
+            var profId = userProfiles.Find(u => u.Username == user.UserName).UserDetailsID;
+            _profileService.DeleteUserDetails(profId).Wait();
         }
 
         public List<UserDto> GetAdmins()
         {
-            var users = _userManager.GetUsersInRoleAsync("Administrator").Result;
+            var users = _userManager.GetUsersInRoleAsync("Administator").Result;
             if (users.Count <= 0)
             {
                 var usersDto = _mapper.Map<List<UserDto>>(users);
-                throw new Exception("Users with given role not found");
+                throw new Exception("Users with given id not found");
             }
             else
             {
@@ -115,42 +111,26 @@ namespace UserService.Service.User
                 {
                     var userProfile = userProfiles.Find(r => r.Username == user.Username);
                     if (userProfile != null)
-                    {
                         user.UserDetails = userProfile;
-                        user.Role = "Administrator";
-                        usersWithProfile.Add(user);
-
-                    }
+                    usersWithProfile.Add(user);
                 }
                 return usersWithProfile;
             }
         }
 
-        private UserDto GetCorporateUserById(Guid id)
+        public UserDto GetCorporateUserById(Guid id)
         {
             var user = _userManager.FindByIdAsync(id.ToString()).Result;
             if (user == null)
             {
-                return null;
+                throw new Exception("User with given id not found");
             }
             var userDto = _mapper.Map<UserDto>(user);
             var userProfiles = _profileService.GetUserDetails().Result;
-            var prof = userProfiles.Find(u => u.Username == user.UserName);
-            if (prof != null)
-            {
-                var userProfile = _profileService.GetCorporateUserDetailsById(prof.UserDetailsID).Result;
-                if (userProfile == null)
-                {
-                    return null;
-                }
-                userDto.Role = "RegularUser";
-                userDto.CorporateUserDetailsDto = userProfile;
-                return userDto;
-            }
-            else
-            {
-                return null;
-            }
+            var profId = userProfiles.Find(u => u.Username == user.UserName).UserDetailsID;
+            var userProfile = _profileService.GetCorporateUserDetailsById(profId).Result;
+            userDto.CorporateUserDetailsDto = userProfile;
+            return userDto;
         }
 
         public List<UserDto> GetCorporateUsers()
@@ -159,7 +139,7 @@ namespace UserService.Service.User
             if (users.Count <= 0)
             {
                 var usersDto = _mapper.Map<List<UserDto>>(users);
-                throw new Exception("Users with given role not found");
+                throw new Exception("Users with given id not found");
             }
             else
             {
@@ -172,7 +152,6 @@ namespace UserService.Service.User
                     if(userProfile != null)
                     {
                         user.CorporateUserDetailsDto = userProfile;
-                        user.Role = "RegularUser";
                         usersWithProfile.Add(user);
                     }
                 }
@@ -180,39 +159,28 @@ namespace UserService.Service.User
             }
         }
 
-        private UserDto GetPersonalUserById(Guid id)
+        public UserDto GetPersonalUserById(Guid id)
         {
             var user = _userManager.FindByIdAsync(id.ToString()).Result;
             if (user == null)
             {
-                return null;
+                throw new Exception("Personal User with given id not found");
             }
             var userDto = _mapper.Map<UserDto>(user);
             var userProfiles = _profileService.GetUserDetails().Result;
-            var prof = userProfiles.Find(u => u.Username == user.UserName);
-            if(prof == null)
-            {
-                return null;
-            }
-            var userProfile = _profileService.GetUserDetailsById(prof.UserDetailsID).Result;
-            var userProfileC = _profileService.GetCorporateUserDetailsById(prof.UserDetailsID).Result;
+            var profId = userProfiles.Find(u => u.Username == user.UserName).UserDetailsID;
+            var userProfile = _profileService.GetUserDetailsById(profId).Result;
+            var userProfileC = _profileService.GetCorporateUserDetailsById(profId).Result;
             if(userProfile != null && userProfileC == null)
             {
                 userDto.UserDetails = userProfile;
-                userDto.Role = "RegularUser";
                 return userDto;
             }
             else
             {
-                return null;
-            }
-        }
+                throw new Exception("Personal User with given id not found");
 
-        private UserDto GetAdminById(Guid id)
-        {
-            var admins = this.GetAdmins();
-            var admin = this.GetAdmins().Find(a => a.Id == id);
-            return admin;
+            }
         }
 
         public List<UserDto> GetPersonalUsers()
@@ -221,7 +189,7 @@ namespace UserService.Service.User
             if (users.Count <= 0)
             {
                 var usersDto = _mapper.Map<List<UserDto>>(users);
-                throw new Exception("Users with given role not found");
+                throw new Exception("Users with given id not found");
             }
             else
             {
@@ -236,7 +204,6 @@ namespace UserService.Service.User
                     if (userProfile != null && userProfileC == null)
                     {
                         user.UserDetails = userProfile;
-                        user.Role = "RegularUser";
                         usersWithProfile.Add(user);
                     }
                 }
@@ -249,31 +216,19 @@ namespace UserService.Service.User
             var user = _userManager.FindByIdAsync(id.ToString()).Result;
             if (user == null)
             {
-                return null;
+                throw new Exception("Personal User with given id not found");
             }
-            var corporateProfile = this.GetCorporateUserById(id);
-            var personalProfile = this.GetPersonalUserById(id);
-            var admin = this.GetAdminById(id);
-            if(admin != null)
-            {
-                return admin;
-            }
-            else if(personalProfile != null)
-            {
-                return personalProfile;
-            }
-            else
-            {
-                return corporateProfile;
-            }
+            var userDto = _mapper.Map<UserDto>(user);
+            var userProfiles = _profileService.GetUserDetails().Result;
+            var profId = userProfiles.Find(u => u.Username == user.UserName).UserDetailsID;
+            var userProfile = _profileService.GetUserDetailsById(profId).Result;
+            userDto.UserDetails = userProfile;
+            return userDto;
         }
 
         public List<UserDto> GetUsers()
         {
-            List<ApplicationUser> users = (List<ApplicationUser>) _userManager.GetUsersInRoleAsync("RegularUser").Result;
-            var limit = users.Count;
-            var adminUsers = _userManager.GetUsersInRoleAsync("Administrator").Result;
-            users.AddRange(adminUsers);
+            var users = _userManager.GetUsersInRoleAsync("RegularUser").Result;
             if (users.Count <= 0)
             {
                 var usersDto = _mapper.Map<List<UserDto>>(users);
@@ -283,46 +238,23 @@ namespace UserService.Service.User
             {
                 var userDtos = _mapper.Map<List<UserDto>>(users);
                 var userProfiles = _profileService.GetUserDetails().Result;
-                var corporateProfiles = _profileService.GetCorporateUserDetails().Result;
                 List<UserDto> usersWithProfile = new List<UserDto>();
                 foreach (var user in userDtos)
                 {
                     var userProfile = userProfiles.Find(r => r.Username == user.Username);
-                    var userCorporateProfile = corporateProfiles.Find(r => r.Username == user.Username);
-                    if (userCorporateProfile != null)
-                    {
-                        user.CorporateUserDetailsDto = userCorporateProfile;
-                        user.Role = "RegularUser";
-                        usersWithProfile.Add(user);
-                    }
-                    else if (userProfile != null)
-                    {
-                        user.UserDetails = userProfile;
-                        if(userDtos.IndexOf(user) <= (limit - 1))
-                        {
-                            user.Role = "RegularUser";
-                        }
-                        else
-                        {
-                            user.Role = "Administrator";
-                        }
-                        usersWithProfile.Add(user);
-                    }
-
+                    if(userProfile != null)
+                    user.UserDetails = userProfile;
+                    usersWithProfile.Add(user);
                 }
                 return usersWithProfile;
             }
         }
 
-        private void UpdateCorporateUser(ApplicationUser oldUser, ApplicationUser newUser, CorporateUserDetailsMutationDto corporateProfile, string? oldPassword, string? newPassword, string token)
+        public void UpdateCorporateUser(ApplicationUser oldUser, ApplicationUser newUser, CorporateUserDetailsMutationDto corporateProfile, string? oldPassword, string? newPassword)
         {
-            var searchUserName = oldUser.UserName;
-            if(oldUser.Email != newUser.Email)
-                oldUser.Email = newUser.Email;
-            if (oldUser.UserName != newUser.UserName)
-                oldUser.UserName = newUser.UserName;
-
-            IdentityResult result = _userManager .UpdateAsync(oldUser).Result;
+            oldUser.Email = newUser.Email;
+            oldUser.UserName = newUser.UserName;
+            IdentityResult result = _userManager.UpdateAsync(oldUser).Result;
             if (result.Succeeded)
             {
                 if(oldPassword != null && newPassword != null)
@@ -331,23 +263,15 @@ namespace UserService.Service.User
                     if(passChangeRes.Succeeded)
                     {
                         var userProfiles = _profileService.GetUserDetails().Result;
-                        var prof = userProfiles.Find(u => u.Username == searchUserName);
-                        if(prof != null )
-                        {
-                            corporateProfile.Username = oldUser.UserName;
-                            _profileService.UpdateCorporateUserDetails(corporateProfile, prof.UserDetailsID, token);
-                        }
+                        var profId = userProfiles.Find(u => u.Username == oldUser.UserName).UserDetailsID;
+                        _profileService.UpdateCorporateUserDetails(corporateProfile, profId);
                     }
                 }
                 else
                 {
                     var userProfiles = _profileService.GetUserDetails().Result;
-                    var prof = userProfiles.Find(u => u.Username == searchUserName);
-                    if (prof != null)
-                    {
-                        corporateProfile.Username = oldUser.UserName;
-                        _profileService.UpdateCorporateUserDetails(corporateProfile, prof.UserDetailsID, token);
-                    }
+                    var profId = userProfiles.Find(u => u.Username == oldUser.UserName).UserDetailsID;
+                    _profileService.UpdateCorporateUserDetails(corporateProfile, profId);
                 }
             }
             else
@@ -357,38 +281,28 @@ namespace UserService.Service.User
             }
         }
 
-        private void UpdatePersonalUser(ApplicationUser oldUser, ApplicationUser newUser, UserMutationDto userProfile, string? oldPassword, string? newPassword, string token)
+        public void UpdateUser(ApplicationUser oldUser, ApplicationUser newUser, UserMutationDto userProfile, string? oldPassword, string? newPassword)
         {
-            var searchUserName = oldUser.UserName;
-            if (oldUser.Email != newUser.Email)
-                oldUser.Email = newUser.Email;
-            if (oldUser.UserName != newUser.UserName)
-                oldUser.UserName = newUser.UserName;
+            oldUser.Email = newUser.Email;
+            oldUser.UserName = newUser.UserName;
             IdentityResult result = _userManager.UpdateAsync(oldUser).Result;
             if (result.Succeeded)
             {
-                if (oldPassword != null && newPassword != null && oldPassword != newPassword)
+                if (oldPassword != null && newPassword != null)
                 {
                     var passChangeRes = _userManager.ChangePasswordAsync(oldUser, oldPassword, newPassword).Result;
                     if (passChangeRes.Succeeded)
                     {
                         var userProfiles = _profileService.GetUserDetails().Result;
-                        var prof = userProfiles.Find(u => u.Username == searchUserName);
-                        if(prof != null)
-                        {
-                            _profileService.UpdateUserDetails(userProfile, prof.UserDetailsID, token);
-                        }
+                        var profId = userProfiles.Find(u => u.Username == oldUser.UserName).UserDetailsID;
+                        _profileService.UpdateUserDetails(userProfile, profId);
                     }
                 }
                 else
                 {
                     var userProfiles = _profileService.GetUserDetails().Result;
-                    var prof = userProfiles.Find(u => u.Username == searchUserName);
-                    if(prof != null)
-                    {
-                        userProfile.Username = oldUser.UserName;
-                        _profileService.UpdateUserDetails(userProfile, prof.UserDetailsID, token);
-                    }
+                    var profId = userProfiles.Find(u => u.Username == oldUser.UserName).UserDetailsID;
+                    _profileService.UpdateUserDetails(userProfile, profId);
                 }
             }
             else
@@ -397,34 +311,5 @@ namespace UserService.Service.User
 
             }
         }
-
-        public void UpdateUser(Guid id, UserUpdateDto userProfile, string token)
-        {
-            var corporateUser = this.GetCorporateUserById(id);
-            var oldUser = _userManager.FindByIdAsync(id.ToString()).Result;
-            if(corporateUser != null)
-            {
-                this.UpdateCorporateUser(
-                    oldUser,
-                    _mapper.Map<ApplicationUser>(userProfile),
-                    userProfile.CorporateUserDetailsDto,
-                    null,
-                    null,
-                    token
-                    );
-            }
-            else
-            {
-                this.UpdatePersonalUser(
-                   oldUser,
-                   _mapper.Map<ApplicationUser>(userProfile),
-                   userProfile.UserDetails,
-                   null,
-                   null,
-                   token
-                   );
-            }
-        }
-
     }
 }

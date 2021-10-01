@@ -15,7 +15,7 @@ namespace UserService.Dtos
         /// <summary>
         /// ID of the user in database
         /// </summary>
-        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
 
         /// <summary>
         /// Username of the user's account
@@ -34,10 +34,16 @@ namespace UserService.Dtos
         public string Email { get; set; }
 
         /// <summary>
+        /// Type of user's account 
+        /// (personal | corporation | admin)
+        /// </summary>
+        public string UserType { get; set; }
+
+        /// <summary>
         /// Boolean value which indicates if user's account
         /// is active
         /// </summary>
-        public Boolean AccountIsActive { get; set; }
+        public Boolean IsActive { get; set; }
 
 
         /// <summary>

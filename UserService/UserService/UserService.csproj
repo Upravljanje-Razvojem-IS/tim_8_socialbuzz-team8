@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.9" />
@@ -22,8 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\tim8-socialbuzzf\tim_8_socialbuzz-team8\AuthService\AuthService.csproj" />
-    <ProjectReference Include="..\..\..\tim8-socialbuzzf\tim_8_socialbuzz-team8\ProfileService\ProfileService.csproj" />
+    <ProjectReference Include="..\..\ProfileService\ProfileService.csproj" />
   </ItemGroup>
 
 
