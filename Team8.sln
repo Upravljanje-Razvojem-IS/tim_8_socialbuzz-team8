@@ -24,6 +24,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactionsService", "Reactio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService", "UserService\UserService\UserService.csproj", "{F0CF7C41-607D-49ED-B90A-64485B8456B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicesCommunication", "ServicesCommunication\ServicesCommunication.csproj", "{7DE13F91-C6DD-4EAD-AD1F-5BED59EA5E54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csproj", "{94C5123F-996E-4EFE-AB0E-468C04728562}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +66,14 @@ Global
 		{F0CF7C41-607D-49ED-B90A-64485B8456B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0CF7C41-607D-49ED-B90A-64485B8456B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0CF7C41-607D-49ED-B90A-64485B8456B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DE13F91-C6DD-4EAD-AD1F-5BED59EA5E54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DE13F91-C6DD-4EAD-AD1F-5BED59EA5E54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DE13F91-C6DD-4EAD-AD1F-5BED59EA5E54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DE13F91-C6DD-4EAD-AD1F-5BED59EA5E54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94C5123F-996E-4EFE-AB0E-468C04728562}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94C5123F-996E-4EFE-AB0E-468C04728562}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94C5123F-996E-4EFE-AB0E-468C04728562}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94C5123F-996E-4EFE-AB0E-468C04728562}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
