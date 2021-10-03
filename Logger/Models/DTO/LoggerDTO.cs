@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace Logger.Entity.DTO
 {
-    public class LoggerDTO
+    public class LoggerDto
     {
-        //public DateTime TimeStamp { get; set; }
         public string Message { get; set; }
     }
 }

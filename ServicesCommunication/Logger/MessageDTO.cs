@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ServicesCommunication.Logger
 {
-    class MessageDTO
+    class MessageDto
     {
         public string message { get; set; }
     }

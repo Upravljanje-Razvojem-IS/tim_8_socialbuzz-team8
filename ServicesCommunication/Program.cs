@@ -4,11 +4,11 @@ using System.Text;
 
 namespace ServicesCommunication
 {
-    class Program
+    static class Program
     {
         public static void Main(string[] args)
         {
-            throw new Exception("Do not initialise this class");
+            throw new ApplicationException("Do not initialise this class");
         }
     }
 }

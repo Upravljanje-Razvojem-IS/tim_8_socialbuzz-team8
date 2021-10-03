@@ -30,8 +30,6 @@ namespace Logger
         {
             services.AddControllers();
 
-            // services.AddDbContext<LoggerContext>(opt => opt.UseInMemoryDatabase("Logger"));
-
              services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Logger", Version = "v1" });
