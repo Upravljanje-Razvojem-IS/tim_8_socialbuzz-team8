@@ -18,7 +18,7 @@ namespace ServicesCommunication.Logger
 
         public bool logAction(string description)
         {
-            MessageDTO messageDTO = new MessageDTO();
+            MessageDto messageDTO = new MessageDto();
             messageDTO.message = description;
             string json = JsonConvert.SerializeObject(messageDTO);
 

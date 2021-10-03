@@ -27,6 +27,7 @@ namespace Messaging.Controller
         {
             this._context = context;
             this._user = user;
+            this._loggerCommunication = new LoggerCommunication();
         }
 
         /// <summary>

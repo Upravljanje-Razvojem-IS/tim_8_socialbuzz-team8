@@ -96,7 +96,7 @@ namespace Logger.Controllers
         [Route("")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Create([FromBody] LoggerDTO logItem, [FromHeader] int UserID)
+        public IActionResult Create([FromBody] LoggerDto logItem, [FromHeader] int UserID)
         {
             var newLogItem = new LogItem()
             {
@@ -128,10 +128,8 @@ namespace Logger.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public IActionResult Update(int id, [FromBody] LoggerDTO logItem, [FromHeader] int UserID, [FromHeader] string UserRole)
+        public IActionResult Update(int id, [FromBody] LoggerDto logItem, [FromHeader] int UserID, [FromHeader] string UserRole)
         {
-            string action = "no action";
-
             var currentLogItem = _context.LogItems.Find(id);
 
             if (currentLogItem == null)
