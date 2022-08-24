@@ -65,7 +65,7 @@ namespace ProfileService.Service.UserDetailsService
             oldCorporateUserDetails.CorporationName = newCorporateUserDetails.CorporationName;
             oldCorporateUserDetails.Pib = newCorporateUserDetails.Pib;
             oldCorporateUserDetails.Username = newCorporateUserDetails.Username;
-            oldCorporateUserDetails.Adress = oldCorporateUserDetails.Adress;
+            oldCorporateUserDetails.Adress = newCorporateUserDetails.Adress;
             _userDetailsRepository.UpdateCorporateUserDetails(oldCorporateUserDetails);
         }
 
@@ -79,7 +79,7 @@ namespace ProfileService.Service.UserDetailsService
             oldUserDetails.Name = newUserDetails.Name;
             oldUserDetails.ProfilePicture = newUserDetails.ProfilePicture;
             oldUserDetails.Username = newUserDetails.Username;
-            oldUserDetails.Adress = oldUserDetails.Adress;
+            oldUserDetails.Adress = newUserDetails.Adress;
             _userDetailsRepository.UpdateUserDetails(oldUserDetails);
         }
     }

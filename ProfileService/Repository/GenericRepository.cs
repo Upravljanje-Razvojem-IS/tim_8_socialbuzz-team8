@@ -10,7 +10,7 @@ namespace ITSolutionsCompanyV1.Repositories
     public abstract class GenericRepository<TEntity> where TEntity : class
     {
         protected ProfileDbContext _dataContext;
-        private DbSet<TEntity> _table;
+        private readonly DbSet<TEntity> _table;
     
         protected GenericRepository(ProfileDbContext dataContext)
         {

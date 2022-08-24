@@ -27,31 +27,10 @@ namespace AuthService.Services
 
         public AuthenticationService(IConfiguration configuration, JwtSettings jwtSettings, IAuthInfoRepository authRepository)
         {
-            _configuration = configuration;
+            //_configuration = configuration;
             _jwtSettings = jwtSettings;
             _authRepository = authRepository;
         }
-
-        //public AuthenticationResponse GetAccessToken(Guid token)
-        //{
-        //    AuthInfo authInfo =_authRepository.GetAuthInfoWithToken(token);
-        //    if(authInfo != null)
-        //    {
-        //        string token = IssueToken(authInfo.Id.ToString(), authInfo.Role);
-        //        authInfo.PrivateToken = privateToken;
-        //        _authRepository.SaveChanges();
-        //        return new AuthenticationResponse
-        //        {
-        //            Token = privateToken,
-        //            Succes = true
-        //        };
-        //    }
-        //    return new AuthenticationResponse
-        //    {
-        //        Error = "Public token not found",
-        //        Succes = false
-        //    };
-        //}
 
         public AuthInfo GetAuthInfoByToken(string token)
         {
